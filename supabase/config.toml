@@ -1,0 +1,7 @@
+project_id = "ulaglibltrtuwurzuylm"
+
+[functions]
+enabled = true
+
+[functions.interview-chat]
+verify_jwt = false
