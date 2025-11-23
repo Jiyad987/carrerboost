@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { MessageSquare, Send, Loader2, Sparkles } from "lucide-react";
+import { MessageSquare, Send, Loader2, Sparkles, Mic, MicOff, Volume2, VolumeX } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -20,7 +20,10 @@ export const InterviewPractice = () => {
   const [inputText, setInputText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isStarted, setIsStarted] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+  const [isSpeechEnabled, setIsSpeechEnabled] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const recognitionRef = useRef<any>(null);
   const { toast } = useToast();
 
   const scrollToBottom = () => {
@@ -30,6 +33,70 @@ export const InterviewPractice = () => {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  useEffect(() => {
+    // Initialize speech recognition
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+      const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
+      recognitionRef.current = new SpeechRecognition();
+      recognitionRef.current.continuous = false;
+      recognitionRef.current.interimResults = false;
+
+      recognitionRef.current.onresult = (event: any) => {
+        const transcript = event.results[0][0].transcript;
+        setInputText(transcript);
+        setIsListening(false);
+      };
+
+      recognitionRef.current.onerror = () => {
+        setIsListening(false);
+        toast({
+          title: "Speech recognition error",
+          description: "Please try again",
+          variant: "destructive",
+        });
+      };
+
+      recognitionRef.current.onend = () => {
+        setIsListening(false);
+      };
+    }
+
+    return () => {
+      if (recognitionRef.current) {
+        recognitionRef.current.stop();
+      }
+    };
+  }, [toast]);
+
+  const speak = (text: string) => {
+    if (!isSpeechEnabled || !('speechSynthesis' in window)) return;
+    
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.rate = 0.9;
+    utterance.pitch = 1;
+    window.speechSynthesis.speak(utterance);
+  };
+
+  const toggleListening = () => {
+    if (!recognitionRef.current) {
+      toast({
+        title: "Speech recognition not supported",
+        description: "Please use a compatible browser",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (isListening) {
+      recognitionRef.current.stop();
+      setIsListening(false);
+    } else {
+      recognitionRef.current.start();
+      setIsListening(true);
+    }
+  };
 
   const startInterview = async () => {
     if (!selectedRole) {
@@ -56,6 +123,7 @@ export const InterviewPractice = () => {
 
       if (data?.message) {
         setMessages([{ role: 'assistant', content: data.message }]);
+        speak(data.message);
       }
     } catch (error) {
       console.error('Error starting interview:', error);
@@ -90,6 +158,7 @@ export const InterviewPractice = () => {
 
       if (data?.message) {
         setMessages(prev => [...prev, { role: 'assistant', content: data.message }]);
+        speak(data.message);
       }
     } catch (error) {
       console.error('Error sending message:', error);
@@ -107,6 +176,10 @@ export const InterviewPractice = () => {
     setMessages([]);
     setIsStarted(false);
     setInputText("");
+    window.speechSynthesis.cancel();
+    if (recognitionRef.current && isListening) {
+      recognitionRef.current.stop();
+    }
   };
 
   return (
@@ -172,9 +245,23 @@ export const InterviewPractice = () => {
                   <div className="w-3 h-3 bg-success rounded-full animate-pulse" />
                   <span className="font-semibold">Interview in Progress</span>
                 </div>
-                <Button variant="outline" onClick={resetInterview} size="sm">
-                  End Interview
-                </Button>
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      setIsSpeechEnabled(!isSpeechEnabled);
+                      if (isSpeechEnabled) {
+                        window.speechSynthesis.cancel();
+                      }
+                    }}
+                  >
+                    {isSpeechEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
+                  </Button>
+                  <Button variant="outline" onClick={resetInterview} size="sm">
+                    End Interview
+                  </Button>
+                </div>
               </div>
 
               <div className="space-y-4 min-h-[400px] max-h-[500px] overflow-y-auto mb-4 p-4 bg-secondary/20 rounded-lg">
@@ -220,17 +307,27 @@ export const InterviewPractice = () => {
                       sendMessage();
                     }
                   }}
-                  placeholder="Type your answer here... (Press Enter to send)"
+                  placeholder="Type or speak your answer..."
                   className="min-h-[80px] resize-none"
-                  disabled={isLoading}
+                  disabled={isLoading || isListening}
                 />
-                <Button 
-                  onClick={sendMessage} 
-                  disabled={!inputText.trim() || isLoading}
-                  className="self-end"
-                >
-                  <Send className="w-4 h-4" />
-                </Button>
+                <div className="flex flex-col gap-2">
+                  <Button 
+                    onClick={toggleListening}
+                    disabled={isLoading}
+                    variant={isListening ? "destructive" : "outline"}
+                    className="self-end"
+                  >
+                    {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+                  </Button>
+                  <Button 
+                    onClick={sendMessage} 
+                    disabled={!inputText.trim() || isLoading || isListening}
+                    className="self-end"
+                  >
+                    <Send className="w-4 h-4" />
+                  </Button>
+                </div>
               </div>
             </Card>
           </div>
