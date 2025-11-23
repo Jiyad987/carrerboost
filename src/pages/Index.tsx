@@ -78,7 +78,12 @@ const Index = () => {
       </nav>
 
       <main>
-        {activeSection === "home" && <HeroSection onGetStarted={() => setActiveSection("resume")} />}
+        {activeSection === "home" && (
+          <HeroSection 
+            onGetStarted={() => setActiveSection("resume")} 
+            onNavigate={(section) => setActiveSection(section)}
+          />
+        )}
         {activeSection === "resume" && <ResumeBuilder />}
         {activeSection === "matcher" && <JobMatcher />}
         {activeSection === "interview" && <InterviewPractice />}
