@@ -22,8 +22,10 @@ export const InterviewPractice = () => {
   const [isStarted, setIsStarted] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [isSpeechEnabled, setIsSpeechEnabled] = useState(true);
+  const [feedback, setFeedback] = useState<{score: number, feedback: string} | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<any>(null);
+  const silenceTimerRef = useRef<any>(null);
   const { toast } = useToast();
 
   const scrollToBottom = () => {
@@ -35,17 +37,37 @@ export const InterviewPractice = () => {
   }, [messages]);
 
   useEffect(() => {
-    // Initialize speech recognition
+    // Initialize speech recognition with voice activity detection
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
       const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
       recognitionRef.current = new SpeechRecognition();
-      recognitionRef.current.continuous = false;
-      recognitionRef.current.interimResults = false;
+      recognitionRef.current.continuous = true;
+      recognitionRef.current.interimResults = true;
 
       recognitionRef.current.onresult = (event: any) => {
-        const transcript = event.results[0][0].transcript;
+        const transcript = Array.from(event.results)
+          .map((result: any) => result[0].transcript)
+          .join('');
         setInputText(transcript);
-        setIsListening(false);
+
+        // Clear existing silence timer
+        if (silenceTimerRef.current) {
+          clearTimeout(silenceTimerRef.current);
+        }
+
+        // Set new silence timer - auto-submit after 2 seconds of silence
+        silenceTimerRef.current = setTimeout(() => {
+          if (transcript.trim() && recognitionRef.current) {
+            recognitionRef.current.stop();
+            setIsListening(false);
+            // Auto-submit the message
+            setTimeout(() => {
+              if (transcript.trim()) {
+                sendMessage();
+              }
+            }, 100);
+          }
+        }, 2000);
       };
 
       recognitionRef.current.onerror = () => {
@@ -59,12 +81,18 @@ export const InterviewPractice = () => {
 
       recognitionRef.current.onend = () => {
         setIsListening(false);
+        if (silenceTimerRef.current) {
+          clearTimeout(silenceTimerRef.current);
+        }
       };
     }
 
     return () => {
       if (recognitionRef.current) {
         recognitionRef.current.stop();
+      }
+      if (silenceTimerRef.current) {
+        clearTimeout(silenceTimerRef.current);
       }
     };
   }, [toast]);
@@ -159,6 +187,11 @@ export const InterviewPractice = () => {
       if (data?.message) {
         setMessages(prev => [...prev, { role: 'assistant', content: data.message }]);
         speak(data.message);
+        
+        // Display feedback if provided
+        if (data.score !== undefined && data.feedback) {
+          setFeedback({ score: data.score, feedback: data.feedback });
+        }
       }
     } catch (error) {
       console.error('Error sending message:', error);
@@ -211,9 +244,18 @@ export const InterviewPractice = () => {
                   <SelectContent>
                     <SelectItem value="software-engineer">Software Engineer</SelectItem>
                     <SelectItem value="data-scientist">Data Scientist</SelectItem>
+                    <SelectItem value="data-analyst">Data Analyst</SelectItem>
+                    <SelectItem value="business-analyst">Business Analyst</SelectItem>
+                    <SelectItem value="gtm-engineer">GTM Engineer</SelectItem>
+                    <SelectItem value="devops-engineer">DevOps Engineer</SelectItem>
+                    <SelectItem value="frontend-developer">Frontend Developer</SelectItem>
+                    <SelectItem value="backend-developer">Backend Developer</SelectItem>
+                    <SelectItem value="fullstack-developer">Full Stack Developer</SelectItem>
                     <SelectItem value="product-manager">Product Manager</SelectItem>
                     <SelectItem value="marketing-manager">Marketing Manager</SelectItem>
                     <SelectItem value="sales-representative">Sales Representative</SelectItem>
+                    <SelectItem value="qa-engineer">QA Engineer</SelectItem>
+                    <SelectItem value="ui-ux-designer">UI/UX Designer</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -263,6 +305,16 @@ export const InterviewPractice = () => {
                   </Button>
                 </div>
               </div>
+
+              {feedback && (
+                <div className="mb-4 p-4 bg-accent/10 border border-accent/20 rounded-lg">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="text-2xl font-bold text-accent">{feedback.score}/10</div>
+                    <span className="text-sm font-semibold">Answer Score</span>
+                  </div>
+                  <p className="text-sm text-muted-foreground">{feedback.feedback}</p>
+                </div>
+              )}
 
               <div className="space-y-4 min-h-[400px] max-h-[500px] overflow-y-auto mb-4 p-4 bg-secondary/20 rounded-lg">
                 {messages.map((message, index) => (

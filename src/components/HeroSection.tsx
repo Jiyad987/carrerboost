@@ -4,29 +4,34 @@ import { FileText, Target, MessageSquare, Linkedin, Sparkles } from "lucide-reac
 
 interface HeroSectionProps {
   onGetStarted: () => void;
+  onNavigate: (section: string) => void;
 }
 
-export const HeroSection = ({ onGetStarted }: HeroSectionProps) => {
+export const HeroSection = ({ onGetStarted, onNavigate }: HeroSectionProps) => {
   const features = [
     {
       icon: FileText,
       title: "ATS-Friendly Resume Builder",
-      description: "Create professional resumes optimized for Applicant Tracking Systems"
+      description: "Create professional resumes optimized for Applicant Tracking Systems",
+      section: "resume"
     },
     {
       icon: Target,
       title: "Job Match Analyzer",
-      description: "Compare your resume with job descriptions and get match scores"
+      description: "Compare your resume with job descriptions and get match scores",
+      section: "matcher"
     },
     {
       icon: MessageSquare,
       title: "Interview Practice",
-      description: "Prepare with role-specific interview questions and tips"
+      description: "Prepare with role-specific interview questions and tips",
+      section: "interview"
     },
     {
       icon: Linkedin,
       title: "LinkedIn Optimizer",
-      description: "Get actionable insights to enhance your LinkedIn profile"
+      description: "Get actionable insights to enhance your LinkedIn profile",
+      section: "linkedin"
     }
   ];
 
@@ -59,14 +64,22 @@ export const HeroSection = ({ onGetStarted }: HeroSectionProps) => {
             Build ATS-optimized resumes, practice interviews, analyze job matches, and optimize your LinkedIn profile—all in one powerful platform.
           </p>
           
-          <div className="flex gap-4 justify-center">
+          <div className="flex gap-4 justify-center flex-wrap">
             <Button size="lg" variant="gradient" onClick={onGetStarted}>
               Get Started Free
             </Button>
-            <Button size="lg" variant="outline">
-              Watch Demo
+            <Button 
+              size="lg" 
+              variant="outline"
+              onClick={() => window.open('https://wa.me/917676074209', '_blank')}
+            >
+              Contact Us
             </Button>
           </div>
+          
+          <p className="text-sm text-muted-foreground mt-6 max-w-2xl mx-auto">
+            🔒 No login required • Your privacy is our priority • All tools work offline
+          </p>
         </motion.div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
@@ -76,7 +89,8 @@ export const HeroSection = ({ onGetStarted }: HeroSectionProps) => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 + index * 0.1 }}
-              className="bg-card rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 border border-border group hover:border-accent"
+              onClick={() => onNavigate(feature.section)}
+              className="bg-card rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 border border-border group hover:border-accent cursor-pointer"
             >
               <div className="bg-gradient-accent w-12 h-12 rounded-lg flex items-center justify-center mb-4 shadow-glow group-hover:scale-110 transition-transform">
                 <feature.icon className="w-6 h-6 text-accent-foreground" />
@@ -86,6 +100,76 @@ export const HeroSection = ({ onGetStarted }: HeroSectionProps) => {
             </motion.div>
           ))}
         </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8 }}
+          className="mt-16 bg-card rounded-2xl p-8 shadow-lg border border-border max-w-3xl mx-auto"
+        >
+          <h3 className="text-2xl font-bold text-center mb-6">Contact Us</h3>
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="space-y-3">
+              <div>
+                <h4 className="font-semibold mb-1">Company</h4>
+                <p className="text-sm text-muted-foreground">Eduwants Global</p>
+              </div>
+              <div>
+                <h4 className="font-semibold mb-1">Location</h4>
+                <p className="text-sm text-muted-foreground">Kochi, Kerala</p>
+              </div>
+              <div>
+                <h4 className="font-semibold mb-1">Phone</h4>
+                <p className="text-sm text-muted-foreground">+91 7676074209</p>
+              </div>
+              <div>
+                <h4 className="font-semibold mb-1">LinkedIn</h4>
+                <a 
+                  href="https://www.linkedin.com/in/sayed-muhammed-jiyad-129935212/" 
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-[#0077B5] hover:underline flex items-center gap-1"
+                >
+                  <Linkedin className="w-4 h-4" />
+                  Connect with us
+                </a>
+              </div>
+            </div>
+            <div>
+              <h4 className="font-semibold mb-3">Send us a message</h4>
+              <form 
+                action={`https://formsubmit.co/jiyadsayydu@gmail.com`}
+                method="POST"
+                className="space-y-3"
+              >
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Your Name"
+                  required
+                  className="w-full px-3 py-2 text-sm border border-border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-accent"
+                />
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Your Email"
+                  required
+                  className="w-full px-3 py-2 text-sm border border-border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-accent"
+                />
+                <textarea
+                  name="message"
+                  placeholder="Your Message"
+                  required
+                  rows={3}
+                  className="w-full px-3 py-2 text-sm border border-border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-accent resize-none"
+                />
+                <Button type="submit" className="w-full" variant="gradient">
+                  Send Message
+                </Button>
+              </form>
+            </div>
+          </div>
+        </motion.div>
 
         <motion.div
           initial={{ opacity: 0 }}
