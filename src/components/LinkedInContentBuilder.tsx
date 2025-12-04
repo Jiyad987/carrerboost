@@ -114,9 +114,9 @@ Which tip resonates with you most? Comment below! 💬`,
 
   return (
     <div className="space-y-6">
-      <Card className="p-6 shadow-lg">
-        <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
-          <FileText className="w-5 h-5 text-accent" />
+      <Card className="p-4 sm:p-6 shadow-lg">
+        <h3 className="text-lg sm:text-xl font-semibold mb-4 flex items-center gap-2">
+          <FileText className="w-4 sm:w-5 h-4 sm:h-5 text-accent" />
           LinkedIn Content Builder
         </h3>
         
@@ -160,9 +160,9 @@ Which tip resonates with you most? Comment below! 💬`,
           animate={{ opacity: 1, y: 0 }}
           className="space-y-4"
         >
-          <Card className="p-6 shadow-lg">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold">Generated Post</h3>
+          <Card className="p-4 sm:p-6 shadow-lg">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
+              <h3 className="text-base sm:text-lg font-semibold">Generated Post</h3>
               <Button
                 onClick={copyToClipboard}
                 variant="outline"
@@ -182,17 +182,17 @@ Which tip resonates with you most? Comment below! 💬`,
                 )}
               </Button>
             </div>
-            <div className="bg-muted/30 p-4 rounded-lg mb-4 whitespace-pre-wrap">
+            <div className="bg-muted/30 p-3 sm:p-4 rounded-lg mb-4 whitespace-pre-wrap text-sm">
               {generatedContent}
             </div>
           </Card>
 
-          <Card className="p-6 shadow-lg">
-            <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-              <Hash className="w-5 h-5 text-accent" />
+          <Card className="p-4 sm:p-6 shadow-lg">
+            <h3 className="text-base sm:text-lg font-semibold mb-4 flex items-center gap-2">
+              <Hash className="w-4 sm:w-5 h-4 sm:h-5 text-accent" />
               Suggested Hashtags
             </h3>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-1.5 sm:gap-2">
               {hashtags.map((hashtag, index) => (
                 <span
                   key={index}
