@@ -222,12 +222,12 @@ export const InterviewPractice = () => {
         animate={{ opacity: 1, y: 0 }}
         className="max-w-4xl mx-auto"
       >
-        <div className="text-center mb-12">
+        <div className="text-center mb-8 sm:mb-12 px-2">
           <div className="inline-flex items-center gap-2 mb-4">
-            <Sparkles className="w-8 h-8 text-accent" />
-            <h2 className="text-4xl font-bold">AI Interview Practice</h2>
+            <Sparkles className="w-6 sm:w-8 h-6 sm:h-8 text-accent" />
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold">AI Interview Practice</h2>
           </div>
-          <p className="text-muted-foreground">Practice with an AI interviewer tailored to your role</p>
+          <p className="text-sm sm:text-base text-muted-foreground">Practice with an AI interviewer tailored to your role</p>
         </div>
 
         {!isStarted ? (
@@ -282,10 +282,10 @@ export const InterviewPractice = () => {
         ) : (
           <div className="space-y-4">
             <Card className="p-6 shadow-lg">
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 bg-success rounded-full animate-pulse" />
-                  <span className="font-semibold">Interview in Progress</span>
+                  <span className="text-sm sm:text-base font-semibold">Interview in Progress</span>
                 </div>
                 <div className="flex gap-2">
                   <Button
@@ -301,7 +301,7 @@ export const InterviewPractice = () => {
                     {isSpeechEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
                   </Button>
                   <Button variant="outline" onClick={resetInterview} size="sm">
-                    End Interview
+                    End
                   </Button>
                 </div>
               </div>
@@ -316,7 +316,7 @@ export const InterviewPractice = () => {
                 </div>
               )}
 
-              <div className="space-y-4 min-h-[400px] max-h-[500px] overflow-y-auto mb-4 p-4 bg-secondary/20 rounded-lg">
+              <div className="space-y-4 min-h-[250px] sm:min-h-[400px] max-h-[350px] sm:max-h-[500px] overflow-y-auto mb-4 p-3 sm:p-4 bg-secondary/20 rounded-lg">
                 {messages.map((message, index) => (
                   <motion.div
                     key={index}
@@ -349,7 +349,7 @@ export const InterviewPractice = () => {
                 <div ref={messagesEndRef} />
               </div>
 
-              <div className="flex gap-2">
+              <div className="flex flex-col sm:flex-row gap-2">
                 <Textarea
                   value={inputText}
                   onChange={(e) => setInputText(e.target.value)}
@@ -360,22 +360,24 @@ export const InterviewPractice = () => {
                     }
                   }}
                   placeholder="Type or speak your answer..."
-                  className="min-h-[80px] resize-none"
+                  className="min-h-[60px] sm:min-h-[80px] resize-none flex-1"
                   disabled={isLoading || isListening}
                 />
-                <div className="flex flex-col gap-2">
+                <div className="flex sm:flex-col gap-2 justify-end">
                   <Button 
                     onClick={toggleListening}
                     disabled={isLoading}
                     variant={isListening ? "destructive" : "outline"}
-                    className="self-end"
+                    size="sm"
+                    className="sm:size-auto"
                   >
                     {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
                   </Button>
                   <Button 
                     onClick={sendMessage} 
                     disabled={!inputText.trim() || isLoading || isListening}
-                    className="self-end"
+                    size="sm"
+                    className="sm:size-auto"
                   >
                     <Send className="w-4 h-4" />
                   </Button>

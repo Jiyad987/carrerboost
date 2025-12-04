@@ -171,17 +171,17 @@ export const ResumeBuilder = () => {
         animate={{ opacity: 1, y: 0 }}
         className="max-w-4xl mx-auto"
       >
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold mb-4">Build Your ATS-Friendly Resume</h2>
-          <p className="text-muted-foreground">Create a professional resume optimized for Applicant Tracking Systems</p>
+        <div className="text-center mb-8 sm:mb-12 px-2">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4">Build Your ATS-Friendly Resume</h2>
+          <p className="text-sm sm:text-base text-muted-foreground">Create a professional resume optimized for Applicant Tracking Systems</p>
         </div>
 
-        <Card className="p-8 shadow-lg">
-          <div className="space-y-8">
+        <Card className="p-4 sm:p-6 md:p-8 shadow-lg">
+          <div className="space-y-6 sm:space-y-8">
             {/* Personal Information */}
             <div>
-              <h3 className="text-xl font-semibold mb-4 text-primary">Personal Information</h3>
-              <div className="grid md:grid-cols-2 gap-4">
+              <h3 className="text-lg sm:text-xl font-semibold mb-4 text-primary">Personal Information</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <Label htmlFor="name">Full Name</Label>
                   <Input
@@ -234,10 +234,10 @@ export const ResumeBuilder = () => {
 
             {/* Work Experience */}
             <div>
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="text-xl font-semibold text-primary">Work Experience</h3>
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-4">
+                <h3 className="text-lg sm:text-xl font-semibold text-primary">Work Experience</h3>
                 <Button onClick={addExperience} size="sm" variant="outline">
-                  <Plus className="w-4 h-4 mr-2" /> Add Experience
+                  <Plus className="w-4 h-4 mr-1 sm:mr-2" /> <span className="hidden sm:inline">Add </span>Experience
                 </Button>
               </div>
               {experiences.map((exp, index) => (
@@ -254,7 +254,7 @@ export const ResumeBuilder = () => {
                       </Button>
                     )}
                   </div>
-                  <div className="grid md:grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <Input
                       placeholder="Company"
                       value={exp.company}
@@ -301,10 +301,10 @@ export const ResumeBuilder = () => {
 
             {/* Education */}
             <div>
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="text-xl font-semibold text-primary">Education</h3>
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-4">
+                <h3 className="text-lg sm:text-xl font-semibold text-primary">Education</h3>
                 <Button onClick={addEducation} size="sm" variant="outline">
-                  <Plus className="w-4 h-4 mr-2" /> Add Education
+                  <Plus className="w-4 h-4 mr-1 sm:mr-2" /> <span className="hidden sm:inline">Add </span>Education
                 </Button>
               </div>
               {education.map((edu, index) => (
@@ -321,7 +321,7 @@ export const ResumeBuilder = () => {
                       </Button>
                     )}
                   </div>
-                  <div className="grid md:grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <Input
                       placeholder="Institution"
                       value={edu.institution}
@@ -357,7 +357,7 @@ export const ResumeBuilder = () => {
 
             {/* Skills */}
             <div>
-              <h3 className="text-xl font-semibold mb-4 text-primary">Skills</h3>
+              <h3 className="text-lg sm:text-xl font-semibold mb-4 text-primary">Skills</h3>
               <Textarea
                 value={skills}
                 onChange={(e) => setSkills(e.target.value)}

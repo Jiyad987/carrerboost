@@ -56,11 +56,11 @@ export const HeroSection = ({ onGetStarted, onNavigate }: HeroSectionProps) => {
             Your Career Success Platform
           </motion.div>
           
-          <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-hero bg-clip-text text-transparent leading-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 bg-gradient-hero bg-clip-text text-transparent leading-tight px-2">
             Land Your Dream Job with AI-Powered Career Tools
           </h1>
           
-          <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
+          <p className="text-base sm:text-lg md:text-xl text-muted-foreground mb-6 sm:mb-8 leading-relaxed px-2">
             Build ATS-optimized resumes, practice interviews, analyze job matches, and optimize your LinkedIn profile—all in one powerful platform.
           </p>
           
@@ -82,7 +82,7 @@ export const HeroSection = ({ onGetStarted, onNavigate }: HeroSectionProps) => {
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 max-w-7xl mx-auto px-2">
           {features.map((feature, index) => (
             <motion.div
               key={index}
@@ -107,8 +107,8 @@ export const HeroSection = ({ onGetStarted, onNavigate }: HeroSectionProps) => {
           transition={{ delay: 0.8 }}
           className="mt-16 bg-card rounded-2xl p-8 shadow-lg border border-border max-w-3xl mx-auto"
         >
-          <h3 className="text-2xl font-bold text-center mb-6">Contact Us</h3>
-          <div className="grid md:grid-cols-2 gap-6">
+          <h3 className="text-xl sm:text-2xl font-bold text-center mb-4 sm:mb-6">Contact Us</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             <div className="space-y-3">
               <div>
                 <h4 className="font-semibold mb-1">Company</h4>
@@ -175,22 +175,22 @@ export const HeroSection = ({ onGetStarted, onNavigate }: HeroSectionProps) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.8 }}
-          className="mt-20 text-center"
+          className="mt-12 sm:mt-20 text-center px-2"
         >
-          <div className="inline-flex items-center gap-8 px-8 py-6 bg-muted/50 rounded-2xl backdrop-blur-sm">
+          <div className="inline-flex flex-col sm:flex-row items-center gap-4 sm:gap-8 px-6 sm:px-8 py-4 sm:py-6 bg-muted/50 rounded-2xl backdrop-blur-sm">
             <div>
-              <div className="text-3xl font-bold text-primary">10K+</div>
-              <div className="text-sm text-muted-foreground">Resumes Created</div>
+              <div className="text-2xl sm:text-3xl font-bold text-primary">10K+</div>
+              <div className="text-xs sm:text-sm text-muted-foreground">Resumes Created</div>
             </div>
-            <div className="h-12 w-px bg-border" />
+            <div className="w-16 h-px sm:h-12 sm:w-px bg-border" />
             <div>
-              <div className="text-3xl font-bold text-secondary">95%</div>
-              <div className="text-sm text-muted-foreground">ATS Pass Rate</div>
+              <div className="text-2xl sm:text-3xl font-bold text-secondary">95%</div>
+              <div className="text-xs sm:text-sm text-muted-foreground">ATS Pass Rate</div>
             </div>
-            <div className="h-12 w-px bg-border" />
+            <div className="w-16 h-px sm:h-12 sm:w-px bg-border" />
             <div>
-              <div className="text-3xl font-bold text-accent">5K+</div>
-              <div className="text-sm text-muted-foreground">Job Matches</div>
+              <div className="text-2xl sm:text-3xl font-bold text-accent">5K+</div>
+              <div className="text-xs sm:text-sm text-muted-foreground">Job Matches</div>
             </div>
           </div>
         </motion.div>
