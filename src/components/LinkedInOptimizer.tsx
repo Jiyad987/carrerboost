@@ -235,32 +235,56 @@ export const LinkedInOptimizer = () => {
             <LinkedInContentBuilder />
           </TabsContent>
 
-          <TabsContent value="tips" className="mt-6">
-            <div className="space-y-6">
-              <Card className="p-6 shadow-lg">
-                <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+          <TabsContent value="tips" className="mt-4 sm:mt-6">
+            <div className="space-y-4 sm:space-y-6">
+              <Card className="p-4 sm:p-6 shadow-lg">
+                <h3 className="text-lg sm:text-xl font-semibold mb-4 flex items-center gap-2">
                   <Lightbulb className="w-5 h-5 text-accent" />
                   Personalized Growth Strategies
                 </h3>
-                <div className="space-y-4">
+                <div className="space-y-3 sm:space-y-4">
                   {analysis?.personalizedTips?.map((tip: string, index: number) => (
-                    <div key={index} className="flex items-start gap-3 p-4 bg-muted/30 rounded-lg">
-                      <div className="bg-accent/10 text-accent w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-sm font-bold">
+                    <div key={index} className="flex items-start gap-3 p-3 sm:p-4 bg-muted/30 rounded-lg">
+                      <div className="bg-accent/10 text-accent w-6 sm:w-8 h-6 sm:h-8 rounded-full flex items-center justify-center flex-shrink-0 text-xs sm:text-sm font-bold">
                         {index + 1}
                       </div>
-                      <p className="text-sm flex-1 pt-1">{tip}</p>
+                      <p className="text-xs sm:text-sm flex-1 pt-0.5 sm:pt-1">{tip}</p>
                     </div>
                   )) || (
-                    <p className="text-muted-foreground text-center py-8">
+                    <p className="text-muted-foreground text-center py-6 sm:py-8 text-sm">
                       Analyze your profile first to get personalized growth tips
                     </p>
                   )}
                 </div>
               </Card>
 
-              <Card className="p-6 shadow-lg bg-accent/5 border-accent/20">
-                <h3 className="text-lg font-semibold mb-4">Content Posting Best Practices</h3>
-                <div className="space-y-3 text-sm">
+              <Card className="p-4 sm:p-6 shadow-lg border-[#0077B5]/20 bg-[#0077B5]/5">
+                <h3 className="text-lg sm:text-xl font-semibold mb-4 flex items-center gap-2">
+                  <TrendingUp className="w-5 h-5 text-[#0077B5]" />
+                  Tips to Increase LinkedIn Reach
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+                  {[
+                    { title: "Hook in First Line", desc: "Start with a compelling question or bold statement to stop the scroll" },
+                    { title: "Use Line Breaks", desc: "Break up text into short paragraphs (1-2 sentences) for mobile readability" },
+                    { title: "Engage First Hour", desc: "Reply to all comments within the first hour to boost algorithm ranking" },
+                    { title: "Tag Strategically", desc: "Tag 3-5 relevant people who might engage, not random connections" },
+                    { title: "Post Consistently", desc: "Aim for 3-5 posts per week at the same times for algorithm favor" },
+                    { title: "Use Carousels", desc: "Document carousels get 3x more reach than single images" },
+                    { title: "End with CTA", desc: "Always end with a question or call-to-action to encourage comments" },
+                    { title: "Avoid External Links", desc: "Put links in comments, not in the post - LinkedIn deprioritizes external links" },
+                  ].map((tip, index) => (
+                    <div key={index} className="p-3 bg-card rounded-lg border border-border">
+                      <p className="font-semibold text-sm mb-1">{tip.title}</p>
+                      <p className="text-xs text-muted-foreground">{tip.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+
+              <Card className="p-4 sm:p-6 shadow-lg bg-accent/5 border-accent/20">
+                <h3 className="text-base sm:text-lg font-semibold mb-4">Content Posting Best Practices</h3>
+                <div className="space-y-3 text-xs sm:text-sm">
                   <div className="flex items-start gap-2">
                     <FileText className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
                     <div>

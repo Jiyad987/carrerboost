@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { MessageSquare, Send, Loader2, Sparkles, Mic, MicOff, Volume2, VolumeX } from "lucide-react";
+import { MessageSquare, Send, Loader2, Sparkles, Mic, MicOff, Volume2, VolumeX, Trophy } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -23,6 +23,8 @@ export const InterviewPractice = () => {
   const [isListening, setIsListening] = useState(false);
   const [isSpeechEnabled, setIsSpeechEnabled] = useState(true);
   const [feedback, setFeedback] = useState<{score: number, feedback: string} | null>(null);
+  const [allScores, setAllScores] = useState<number[]>([]);
+  const [questionsAnswered, setQuestionsAnswered] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<any>(null);
   const silenceTimerRef = useRef<any>(null);
@@ -191,6 +193,8 @@ export const InterviewPractice = () => {
         // Display feedback if provided
         if (data.score !== undefined && data.feedback) {
           setFeedback({ score: data.score, feedback: data.feedback });
+          setAllScores(prev => [...prev, data.score]);
+          setQuestionsAnswered(prev => prev + 1);
         }
       }
     } catch (error) {
@@ -209,10 +213,24 @@ export const InterviewPractice = () => {
     setMessages([]);
     setIsStarted(false);
     setInputText("");
+    setFeedback(null);
+    setAllScores([]);
+    setQuestionsAnswered(0);
     window.speechSynthesis.cancel();
     if (recognitionRef.current && isListening) {
       recognitionRef.current.stop();
     }
+  };
+
+  const averageScore = allScores.length > 0 
+    ? Math.round(allScores.reduce((a, b) => a + b, 0) / allScores.length) 
+    : 0;
+
+  const getPreparationLevel = (score: number) => {
+    if (score >= 8) return { level: "Excellent", color: "text-success" };
+    if (score >= 6) return { level: "Good", color: "text-accent" };
+    if (score >= 4) return { level: "Needs Work", color: "text-warning" };
+    return { level: "Keep Practicing", color: "text-destructive" };
   };
 
   return (
@@ -306,13 +324,36 @@ export const InterviewPractice = () => {
                 </div>
               </div>
 
-              {feedback && (
-                <div className="mb-4 p-4 bg-accent/10 border border-accent/20 rounded-lg">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="text-2xl font-bold text-accent">{feedback.score}/10</div>
-                    <span className="text-sm font-semibold">Answer Score</span>
+              {/* Interview Preparation Score */}
+              {questionsAnswered > 0 && (
+                <div className="mb-4 p-3 sm:p-4 bg-gradient-card border border-border rounded-lg">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+                    <div className="flex items-center gap-2">
+                      <Trophy className="w-5 h-5 text-accent" />
+                      <span className="text-sm font-semibold">Interview Preparation Score</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="text-xs text-muted-foreground">
+                        {questionsAnswered} question{questionsAnswered > 1 ? 's' : ''} answered
+                      </div>
+                      <div className={`text-xl sm:text-2xl font-bold ${getPreparationLevel(averageScore).color}`}>
+                        {averageScore}/10
+                      </div>
+                      <span className={`text-xs font-medium px-2 py-1 rounded-full bg-muted ${getPreparationLevel(averageScore).color}`}>
+                        {getPreparationLevel(averageScore).level}
+                      </span>
+                    </div>
                   </div>
-                  <p className="text-sm text-muted-foreground">{feedback.feedback}</p>
+                </div>
+              )}
+
+              {feedback && (
+                <div className="mb-4 p-3 sm:p-4 bg-accent/10 border border-accent/20 rounded-lg">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="text-xl sm:text-2xl font-bold text-accent">{feedback.score}/10</div>
+                    <span className="text-xs sm:text-sm font-semibold">Last Answer Score</span>
+                  </div>
+                  <p className="text-xs sm:text-sm text-muted-foreground">{feedback.feedback}</p>
                 </div>
               )}
 
