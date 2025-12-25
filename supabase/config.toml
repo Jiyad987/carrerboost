@@ -5,3 +5,6 @@ enabled = true
 
 [functions.interview-chat]
 verify_jwt = false
+
+[functions.ai-job-search]
+verify_jwt = false

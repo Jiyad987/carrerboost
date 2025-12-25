@@ -5,9 +5,29 @@ import { ResumeBuilder } from "@/components/ResumeBuilder";
 import { JobMatcher } from "@/components/JobMatcher";
 import { InterviewPractice } from "@/components/InterviewPractice";
 import { LinkedInOptimizer } from "@/components/LinkedInOptimizer";
+import { Blog } from "@/components/Blog";
+import { AIJobFinder } from "@/components/AIJobFinder";
+import { Menu, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const Index = () => {
   const [activeSection, setActiveSection] = useState<string>("home");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const navItems = [
+    { id: "home", label: "Home" },
+    { id: "resume", label: "Resume" },
+    { id: "jobs", label: "AI Jobs" },
+    { id: "matcher", label: "Matcher" },
+    { id: "interview", label: "Interview" },
+    { id: "linkedin", label: "LinkedIn" },
+    { id: "blog", label: "Blog" },
+  ];
+
+  const handleNavClick = (section: string) => {
+    setActiveSection(section);
+    setMobileMenuOpen(false);
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -15,65 +35,65 @@ const Index = () => {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <motion.h1 
-              className="text-2xl font-bold bg-gradient-hero bg-clip-text text-transparent"
+              className="text-xl sm:text-2xl font-bold bg-gradient-hero bg-clip-text text-transparent"
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
             >
               CareerBoost
             </motion.h1>
-            <div className="flex gap-2">
-              <button
-                onClick={() => setActiveSection("home")}
-                className={`px-4 py-2 rounded-lg font-medium transition-all ${
-                  activeSection === "home"
-                    ? "bg-primary text-primary-foreground shadow-md"
-                    : "text-muted-foreground hover:text-foreground hover:bg-muted"
-                }`}
-              >
-                Home
-              </button>
-              <button
-                onClick={() => setActiveSection("resume")}
-                className={`px-4 py-2 rounded-lg font-medium transition-all ${
-                  activeSection === "resume"
-                    ? "bg-primary text-primary-foreground shadow-md"
-                    : "text-muted-foreground hover:text-foreground hover:bg-muted"
-                }`}
-              >
-                Resume Builder
-              </button>
-              <button
-                onClick={() => setActiveSection("matcher")}
-                className={`px-4 py-2 rounded-lg font-medium transition-all ${
-                  activeSection === "matcher"
-                    ? "bg-primary text-primary-foreground shadow-md"
-                    : "text-muted-foreground hover:text-foreground hover:bg-muted"
-                }`}
-              >
-                Job Matcher
-              </button>
-              <button
-                onClick={() => setActiveSection("interview")}
-                className={`px-4 py-2 rounded-lg font-medium transition-all ${
-                  activeSection === "interview"
-                    ? "bg-primary text-primary-foreground shadow-md"
-                    : "text-muted-foreground hover:text-foreground hover:bg-muted"
-                }`}
-              >
-                Interview Prep
-              </button>
-              <button
-                onClick={() => setActiveSection("linkedin")}
-                className={`px-4 py-2 rounded-lg font-medium transition-all ${
-                  activeSection === "linkedin"
-                    ? "bg-primary text-primary-foreground shadow-md"
-                    : "text-muted-foreground hover:text-foreground hover:bg-muted"
-                }`}
-              >
-                LinkedIn
-              </button>
+
+            {/* Mobile menu button */}
+            <Button
+              variant="ghost"
+              size="sm"
+              className="md:hidden"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </Button>
+
+            {/* Desktop navigation */}
+            <div className="hidden md:flex gap-1 lg:gap-2">
+              {navItems.map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => handleNavClick(item.id)}
+                  className={`px-3 lg:px-4 py-2 rounded-lg font-medium transition-all text-sm ${
+                    activeSection === item.id
+                      ? "bg-primary text-primary-foreground shadow-md"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                  }`}
+                >
+                  {item.label}
+                </button>
+              ))}
             </div>
           </div>
+
+          {/* Mobile navigation */}
+          {mobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="md:hidden mt-4 pb-2"
+            >
+              <div className="flex flex-wrap gap-2">
+                {navItems.map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => handleNavClick(item.id)}
+                    className={`px-3 py-2 rounded-lg font-medium transition-all text-sm ${
+                      activeSection === item.id
+                        ? "bg-primary text-primary-foreground shadow-md"
+                        : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                    }`}
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </div>
+            </motion.div>
+          )}
         </div>
       </nav>
 
@@ -85,9 +105,11 @@ const Index = () => {
           />
         )}
         {activeSection === "resume" && <ResumeBuilder />}
+        {activeSection === "jobs" && <AIJobFinder />}
         {activeSection === "matcher" && <JobMatcher />}
         {activeSection === "interview" && <InterviewPractice />}
         {activeSection === "linkedin" && <LinkedInOptimizer />}
+        {activeSection === "blog" && <Blog />}
       </main>
 
       <footer className="bg-muted/30 border-t border-border mt-20">
