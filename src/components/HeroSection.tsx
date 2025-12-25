@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { FileText, Target, MessageSquare, Linkedin, Sparkles } from "lucide-react";
+import { FileText, Target, MessageSquare, Linkedin, Sparkles, Search, BookOpen } from "lucide-react";
 
 interface HeroSectionProps {
   onGetStarted: () => void;
@@ -14,6 +14,12 @@ export const HeroSection = ({ onGetStarted, onNavigate }: HeroSectionProps) => {
       title: "ATS-Friendly Resume Builder",
       description: "Create professional resumes optimized for Applicant Tracking Systems",
       section: "resume"
+    },
+    {
+      icon: Search,
+      title: "AI Job Finder",
+      description: "Find jobs, get HR contacts, and generate cover letters with AI",
+      section: "jobs"
     },
     {
       icon: Target,
@@ -32,6 +38,12 @@ export const HeroSection = ({ onGetStarted, onNavigate }: HeroSectionProps) => {
       title: "LinkedIn Optimizer",
       description: "Get actionable insights to enhance your LinkedIn profile",
       section: "linkedin"
+    },
+    {
+      icon: BookOpen,
+      title: "Career Blog",
+      description: "Share and discover career tips from the community",
+      section: "blog"
     }
   ];
 
@@ -82,7 +94,7 @@ export const HeroSection = ({ onGetStarted, onNavigate }: HeroSectionProps) => {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 max-w-7xl mx-auto px-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-7xl mx-auto px-2">
           {features.map((feature, index) => (
             <motion.div
               key={index}
