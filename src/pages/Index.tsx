@@ -7,6 +7,7 @@ import { InterviewPractice } from "@/components/InterviewPractice";
 import { LinkedInOptimizer } from "@/components/LinkedInOptimizer";
 import { Blog } from "@/components/Blog";
 import { AIJobFinder } from "@/components/AIJobFinder";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -42,15 +43,18 @@ const Index = () => {
               CareerBoost
             </motion.h1>
 
-            {/* Mobile menu button */}
-            <Button
-              variant="ghost"
-              size="sm"
-              className="md:hidden"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </Button>
+            {/* Theme toggle and mobile menu button */}
+            <div className="flex items-center gap-2">
+              <ThemeToggle />
+              <Button
+                variant="ghost"
+                size="sm"
+                className="md:hidden"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              >
+                {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              </Button>
+            </div>
 
             {/* Desktop navigation */}
             <div className="hidden md:flex gap-1 lg:gap-2">
