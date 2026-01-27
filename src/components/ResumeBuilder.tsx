@@ -7,7 +7,8 @@ import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { Download, Plus, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import jsPDF from "jspdf";
+import { ResumeTemplates, TemplateType } from "./resume/ResumeTemplates";
+import { generateResumePDF } from "./resume/generateResumePDF";
 
 interface Experience {
   id: string;
@@ -43,6 +44,7 @@ export const ResumeBuilder = () => {
   ]);
   
   const [skills, setSkills] = useState("");
+  const [selectedTemplate, setSelectedTemplate] = useState<TemplateType>("modern");
 
   const addExperience = () => {
     setExperiences([...experiences, {
@@ -72,95 +74,15 @@ export const ResumeBuilder = () => {
   };
 
   const generatePDF = () => {
-    const doc = new jsPDF();
-    let yPos = 20;
-
-    // Header
-    doc.setFontSize(24);
-    doc.setFont("helvetica", "bold");
-    doc.text(personalInfo.name || "Your Name", 20, yPos);
-    yPos += 10;
-
-    doc.setFontSize(10);
-    doc.setFont("helvetica", "normal");
-    doc.text(`${personalInfo.email} | ${personalInfo.phone} | ${personalInfo.location}`, 20, yPos);
-    yPos += 15;
-
-    // Summary
-    if (personalInfo.summary) {
-      doc.setFontSize(12);
-      doc.setFont("helvetica", "bold");
-      doc.text("PROFESSIONAL SUMMARY", 20, yPos);
-      yPos += 7;
-      doc.setFontSize(10);
-      doc.setFont("helvetica", "normal");
-      const summaryLines = doc.splitTextToSize(personalInfo.summary, 170);
-      doc.text(summaryLines, 20, yPos);
-      yPos += summaryLines.length * 5 + 10;
-    }
-
-    // Experience
-    if (experiences.some(exp => exp.company)) {
-      doc.setFontSize(12);
-      doc.setFont("helvetica", "bold");
-      doc.text("WORK EXPERIENCE", 20, yPos);
-      yPos += 7;
-
-      experiences.forEach(exp => {
-        if (exp.company) {
-          doc.setFontSize(11);
-          doc.setFont("helvetica", "bold");
-          doc.text(exp.position, 20, yPos);
-          yPos += 5;
-          doc.setFontSize(10);
-          doc.setFont("helvetica", "italic");
-          doc.text(`${exp.company} | ${exp.duration}`, 20, yPos);
-          yPos += 5;
-          doc.setFont("helvetica", "normal");
-          const descLines = doc.splitTextToSize(exp.description, 170);
-          doc.text(descLines, 20, yPos);
-          yPos += descLines.length * 5 + 5;
-        }
-      });
-      yPos += 5;
-    }
-
-    // Education
-    if (education.some(edu => edu.institution)) {
-      doc.setFontSize(12);
-      doc.setFont("helvetica", "bold");
-      doc.text("EDUCATION", 20, yPos);
-      yPos += 7;
-
-      education.forEach(edu => {
-        if (edu.institution) {
-          doc.setFontSize(10);
-          doc.setFont("helvetica", "bold");
-          doc.text(edu.degree, 20, yPos);
-          yPos += 5;
-          doc.setFont("helvetica", "normal");
-          doc.text(`${edu.institution} | ${edu.year}`, 20, yPos);
-          yPos += 8;
-        }
-      });
-    }
-
-    // Skills
-    if (skills) {
-      doc.setFontSize(12);
-      doc.setFont("helvetica", "bold");
-      doc.text("SKILLS", 20, yPos);
-      yPos += 7;
-      doc.setFontSize(10);
-      doc.setFont("helvetica", "normal");
-      const skillsLines = doc.splitTextToSize(skills, 170);
-      doc.text(skillsLines, 20, yPos);
-    }
-
-    doc.save("resume.pdf");
+    generateResumePDF(selectedTemplate, {
+      personalInfo,
+      experiences,
+      education,
+      skills,
+    });
     toast({
       title: "Success!",
-      description: "Your ATS-friendly resume has been downloaded.",
+      description: `Your ${selectedTemplate} resume has been downloaded.`,
     });
   };
 
@@ -366,9 +288,15 @@ export const ResumeBuilder = () => {
               />
             </div>
 
+            {/* Template Selection */}
+            <ResumeTemplates
+              selectedTemplate={selectedTemplate}
+              onSelectTemplate={setSelectedTemplate}
+            />
+
             <Button onClick={generatePDF} size="lg" variant="gradient" className="w-full">
               <Download className="w-5 h-5 mr-2" />
-              Download ATS-Friendly Resume (PDF)
+              Download {selectedTemplate.charAt(0).toUpperCase() + selectedTemplate.slice(1)} Resume (PDF)
             </Button>
           </div>
         </Card>
