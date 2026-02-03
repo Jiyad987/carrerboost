@@ -18,7 +18,6 @@ const Index = () => {
   const navItems = [
     { id: "home", label: "Home" },
     { id: "resume", label: "Resume" },
-    { id: "jobs", label: "AI Jobs" },
     { id: "matcher", label: "Matcher" },
     { id: "interview", label: "Interview" },
     { id: "linkedin", label: "LinkedIn" },
@@ -109,7 +108,6 @@ const Index = () => {
           />
         )}
         {activeSection === "resume" && <ResumeBuilder />}
-        {activeSection === "jobs" && <AIJobFinder />}
         {activeSection === "matcher" && <JobMatcher />}
         {activeSection === "interview" && <InterviewPractice />}
         {activeSection === "linkedin" && <LinkedInOptimizer />}

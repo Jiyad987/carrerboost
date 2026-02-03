@@ -7,8 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { Download, Plus, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { ResumeTemplates, TemplateType } from "./resume/ResumeTemplates";
-import { generateResumePDF } from "./resume/generateResumePDF";
+import jsPDF from "jspdf";
 
 interface Experience {
   id: string;
@@ -44,7 +43,6 @@ export const ResumeBuilder = () => {
   ]);
   
   const [skills, setSkills] = useState("");
-  const [selectedTemplate, setSelectedTemplate] = useState<TemplateType>("modern");
 
   const addExperience = () => {
     setExperiences([...experiences, {
@@ -74,15 +72,98 @@ export const ResumeBuilder = () => {
   };
 
   const generatePDF = () => {
-    generateResumePDF(selectedTemplate, {
-      personalInfo,
-      experiences,
-      education,
-      skills,
-    });
+    const doc = new jsPDF();
+    
+    // Header
+    doc.setFontSize(24);
+    doc.setFont("helvetica", "bold");
+    doc.text(personalInfo.name || "Your Name", 105, 25, { align: "center" });
+    
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "normal");
+    const contactInfo = [personalInfo.email, personalInfo.phone, personalInfo.location].filter(Boolean).join(" | ");
+    doc.text(contactInfo, 105, 33, { align: "center" });
+    
+    let yPosition = 45;
+    
+    // Summary
+    if (personalInfo.summary) {
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "bold");
+      doc.text("Professional Summary", 20, yPosition);
+      yPosition += 8;
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "normal");
+      const summaryLines = doc.splitTextToSize(personalInfo.summary, 170);
+      doc.text(summaryLines, 20, yPosition);
+      yPosition += summaryLines.length * 5 + 10;
+    }
+    
+    // Experience
+    if (experiences.some(exp => exp.company || exp.position)) {
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "bold");
+      doc.text("Work Experience", 20, yPosition);
+      yPosition += 8;
+      
+      experiences.forEach((exp) => {
+        if (exp.company || exp.position) {
+          doc.setFontSize(11);
+          doc.setFont("helvetica", "bold");
+          doc.text(`${exp.position}${exp.company ? ` at ${exp.company}` : ""}`, 20, yPosition);
+          yPosition += 5;
+          doc.setFontSize(9);
+          doc.setFont("helvetica", "italic");
+          doc.text(exp.duration, 20, yPosition);
+          yPosition += 5;
+          if (exp.description) {
+            doc.setFont("helvetica", "normal");
+            const descLines = doc.splitTextToSize(exp.description, 170);
+            doc.text(descLines, 20, yPosition);
+            yPosition += descLines.length * 4 + 5;
+          }
+          yPosition += 3;
+        }
+      });
+    }
+    
+    // Education
+    if (education.some(edu => edu.institution || edu.degree)) {
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "bold");
+      doc.text("Education", 20, yPosition);
+      yPosition += 8;
+      
+      education.forEach((edu) => {
+        if (edu.institution || edu.degree) {
+          doc.setFontSize(11);
+          doc.setFont("helvetica", "bold");
+          doc.text(`${edu.degree}${edu.institution ? ` - ${edu.institution}` : ""}`, 20, yPosition);
+          yPosition += 5;
+          doc.setFontSize(9);
+          doc.setFont("helvetica", "normal");
+          doc.text(edu.year, 20, yPosition);
+          yPosition += 8;
+        }
+      });
+    }
+    
+    // Skills
+    if (skills) {
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "bold");
+      doc.text("Skills", 20, yPosition);
+      yPosition += 8;
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "normal");
+      const skillLines = doc.splitTextToSize(skills, 170);
+      doc.text(skillLines, 20, yPosition);
+    }
+    
+    doc.save(`${personalInfo.name || "resume"}.pdf`);
     toast({
       title: "Success!",
-      description: `Your ${selectedTemplate} resume has been downloaded.`,
+      description: "Your resume has been downloaded.",
     });
   };
 
@@ -288,15 +369,9 @@ export const ResumeBuilder = () => {
               />
             </div>
 
-            {/* Template Selection */}
-            <ResumeTemplates
-              selectedTemplate={selectedTemplate}
-              onSelectTemplate={setSelectedTemplate}
-            />
-
             <Button onClick={generatePDF} size="lg" variant="gradient" className="w-full">
               <Download className="w-5 h-5 mr-2" />
-              Download {selectedTemplate.charAt(0).toUpperCase() + selectedTemplate.slice(1)} Resume (PDF)
+              Download Resume (PDF)
             </Button>
           </div>
         </Card>
