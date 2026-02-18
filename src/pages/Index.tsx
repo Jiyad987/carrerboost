@@ -39,7 +39,7 @@ const Index = () => {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
             >
-              CareerBoost
+              Panikittum
             </motion.h1>
 
             {/* Theme toggle and mobile menu button */}
@@ -116,7 +116,7 @@ const Index = () => {
 
       <footer className="bg-muted/30 border-t border-border mt-20">
         <div className="container mx-auto px-4 py-8 text-center text-muted-foreground">
-          <p>&copy; 2024 CareerBoost. Built for career success.</p>
+          <p>&copy; 2024 Panikittum. Built for career success.</p>
         </div>
       </footer>
     </div>
