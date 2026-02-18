@@ -19,6 +19,7 @@ interface AnalysisResult {
   matchedSkills: string[];
   missingSkills: string[];
   suggestions: string[];
+  resumeSuggestions: string[];
   detailedAnalysis: {
     skillsToAdd: string[];
     experienceGaps: string[];
@@ -141,6 +142,7 @@ export const JobMatcher = () => {
         matchedSkills,
         missingSkills,
         suggestions: generateSuggestions(matchScore, missingSkills, missingKeywords),
+        resumeSuggestions: generateResumeSuggestions(matchScore, missingSkills, missingKeywords, jobDescription, resumeText),
         detailedAnalysis,
       });
 
@@ -267,6 +269,71 @@ export const JobMatcher = () => {
     suggestions.push("Quantify your achievements with numbers and percentages where possible");
     suggestions.push("Ensure your resume format is ATS-friendly with clear section headers");
     
+    return suggestions;
+  };
+
+  const generateResumeSuggestions = (
+    score: number,
+    missingSkills: string[],
+    missingKeywords: string[],
+    jd: string,
+    resume: string
+  ): string[] => {
+    const jdLower = jd.toLowerCase();
+    const resumeLower = resume.toLowerCase();
+    const suggestions: string[] = [];
+
+    // Suggest adding a professional summary tailored to the role
+    if (!resumeLower.includes("summary") && !resumeLower.includes("objective") && !resumeLower.includes("profile")) {
+      suggestions.push("📝 Add a Professional Summary section at the top of your resume tailored to this specific role");
+    }
+
+    // Suggest missing skills to add
+    if (missingSkills.length > 0) {
+      suggestions.push(`🛠️ Add a 'Technical Skills' section including: ${missingSkills.join(", ")}`);
+    }
+
+    // Suggest projects section
+    if (!resumeLower.includes("project")) {
+      suggestions.push("💼 Add a 'Projects' section showcasing relevant work that demonstrates the required skills");
+    }
+
+    // Suggest certifications
+    const certKeywords = ['certified', 'certification', 'aws', 'pmp', 'scrum', 'google', 'microsoft', 'comptia'];
+    const jdCerts = certKeywords.filter(c => jdLower.includes(c));
+    if (jdCerts.length > 0 && !certKeywords.some(c => resumeLower.includes(c))) {
+      suggestions.push(`🏅 Add relevant certifications — the job mentions: ${jdCerts.join(", ")}`);
+    }
+
+    // Quantifiable achievements
+    if (!resumeLower.match(/\d+%/) && !resumeLower.match(/\$\d+/)) {
+      suggestions.push("📊 Add quantifiable achievements (e.g., 'Reduced load time by 40%', 'Managed $500K budget')");
+    }
+
+    // Keywords from JD to weave in
+    if (missingKeywords.length > 3) {
+      suggestions.push(`🔑 Weave these keywords naturally into your experience: ${missingKeywords.slice(0, 6).join(", ")}`);
+    }
+
+    // Leadership
+    if ((jdLower.includes("lead") || jdLower.includes("manage") || jdLower.includes("mentor")) && 
+        !resumeLower.includes("led") && !resumeLower.includes("managed") && !resumeLower.includes("mentored")) {
+      suggestions.push("👥 Add leadership examples: team size managed, mentoring, cross-team collaboration");
+    }
+
+    // Education relevance
+    if (jdLower.includes("degree") && !resumeLower.includes("bachelor") && !resumeLower.includes("master") && !resumeLower.includes("degree")) {
+      suggestions.push("🎓 Ensure your Education section highlights relevant degrees and coursework");
+    }
+
+    // ATS formatting
+    suggestions.push("📋 Use standard section headers (Experience, Education, Skills) for ATS compatibility");
+    suggestions.push("✏️ Mirror exact phrases from the job description in your bullet points");
+
+    if (score < 60) {
+      suggestions.push("🔄 Consider rewriting your entire experience section to focus on responsibilities matching this role");
+    }
+
     return suggestions;
   };
 
@@ -525,6 +592,26 @@ export const JobMatcher = () => {
                 ))}
               </ol>
             </Card>
+
+            {/* Resume Suggestions - What to Add */}
+            {analysisResult.resumeSuggestions.length > 0 && (
+              <Card className="p-6 shadow-lg border-2 border-success/20 bg-success/5">
+                <h3 className="text-2xl font-bold mb-6 flex items-center gap-2">
+                  <FileText className="w-7 h-7 text-success" />
+                  Suggestions to Add in Your Resume
+                </h3>
+                <ul className="space-y-3">
+                  {analysisResult.resumeSuggestions.map((suggestion: string, index: number) => (
+                    <li key={index} className="flex items-start gap-3 bg-background/60 p-4 rounded-lg border border-success/10">
+                      <span className="flex-shrink-0 w-6 h-6 rounded-full bg-success/20 text-success font-bold flex items-center justify-center text-xs">
+                        {index + 1}
+                      </span>
+                      <span className="text-sm">{suggestion}</span>
+                    </li>
+                  ))}
+                </ul>
+              </Card>
+            )}
 
             <Card className="p-6 shadow-lg">
               <div className="flex items-center gap-2 mb-4">

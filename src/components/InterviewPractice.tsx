@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { MessageSquare, Send, Loader2, Sparkles, Mic, MicOff, Volume2, VolumeX, Trophy } from "lucide-react";
+import { MessageSquare, Send, Loader2, Sparkles, Mic, MicOff, Volume2, VolumeX, Trophy, RotateCcw, Target, AlertCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -25,6 +25,9 @@ export const InterviewPractice = () => {
   const [feedback, setFeedback] = useState<{score: number, feedback: string} | null>(null);
   const [allScores, setAllScores] = useState<number[]>([]);
   const [questionsAnswered, setQuestionsAnswered] = useState(0);
+  const [isInterviewComplete, setIsInterviewComplete] = useState(false);
+  const [improvementAreas, setImprovementAreas] = useState<string[]>([]);
+  const TOTAL_QUESTIONS = 5;
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<any>(null);
   const silenceTimerRef = useRef<any>(null);
@@ -194,7 +197,18 @@ export const InterviewPractice = () => {
         if (data.score !== undefined && data.feedback) {
           setFeedback({ score: data.score, feedback: data.feedback });
           setAllScores(prev => [...prev, data.score]);
-          setQuestionsAnswered(prev => prev + 1);
+          const newCount = questionsAnswered + 1;
+          setQuestionsAnswered(newCount);
+          
+          // Collect improvement areas from feedback
+          if (data.score < 8 && data.feedback) {
+            setImprovementAreas(prev => [...prev, data.feedback]);
+          }
+          
+          // Check if interview is complete
+          if (newCount >= TOTAL_QUESTIONS) {
+            setIsInterviewComplete(true);
+          }
         }
       }
     } catch (error) {
@@ -216,6 +230,8 @@ export const InterviewPractice = () => {
     setFeedback(null);
     setAllScores([]);
     setQuestionsAnswered(0);
+    setIsInterviewComplete(false);
+    setImprovementAreas([]);
     window.speechSynthesis.cancel();
     if (recognitionRef.current && isListening) {
       recognitionRef.current.stop();
@@ -259,21 +275,36 @@ export const InterviewPractice = () => {
                   <SelectTrigger id="role" className="w-full mt-2">
                     <SelectValue placeholder="Choose a job role..." />
                   </SelectTrigger>
-                  <SelectContent>
+                   <SelectContent>
                     <SelectItem value="software-engineer">Software Engineer</SelectItem>
-                    <SelectItem value="data-scientist">Data Scientist</SelectItem>
-                    <SelectItem value="data-analyst">Data Analyst</SelectItem>
-                    <SelectItem value="business-analyst">Business Analyst</SelectItem>
-                    <SelectItem value="gtm-engineer">GTM Engineer</SelectItem>
-                    <SelectItem value="devops-engineer">DevOps Engineer</SelectItem>
                     <SelectItem value="frontend-developer">Frontend Developer</SelectItem>
                     <SelectItem value="backend-developer">Backend Developer</SelectItem>
                     <SelectItem value="fullstack-developer">Full Stack Developer</SelectItem>
-                    <SelectItem value="product-manager">Product Manager</SelectItem>
-                    <SelectItem value="marketing-manager">Marketing Manager</SelectItem>
-                    <SelectItem value="sales-representative">Sales Representative</SelectItem>
+                    <SelectItem value="data-scientist">Data Scientist</SelectItem>
+                    <SelectItem value="data-analyst">Data Analyst</SelectItem>
+                    <SelectItem value="data-engineer">Data Engineer</SelectItem>
+                    <SelectItem value="ml-engineer">Machine Learning Engineer</SelectItem>
+                    <SelectItem value="ai-engineer">AI Engineer</SelectItem>
+                    <SelectItem value="devops-engineer">DevOps Engineer</SelectItem>
+                    <SelectItem value="sre-engineer">Site Reliability Engineer</SelectItem>
+                    <SelectItem value="cloud-architect">Cloud Architect</SelectItem>
+                    <SelectItem value="security-engineer">Security Engineer</SelectItem>
+                    <SelectItem value="mobile-developer">Mobile Developer</SelectItem>
+                    <SelectItem value="embedded-engineer">Embedded Systems Engineer</SelectItem>
+                    <SelectItem value="blockchain-developer">Blockchain Developer</SelectItem>
                     <SelectItem value="qa-engineer">QA Engineer</SelectItem>
                     <SelectItem value="ui-ux-designer">UI/UX Designer</SelectItem>
+                    <SelectItem value="product-manager">Product Manager</SelectItem>
+                    <SelectItem value="technical-writer">Technical Writer</SelectItem>
+                    <SelectItem value="business-analyst">Business Analyst</SelectItem>
+                    <SelectItem value="gtm-engineer">GTM Engineer</SelectItem>
+                    <SelectItem value="marketing-manager">Marketing Manager</SelectItem>
+                    <SelectItem value="sales-representative">Sales Representative</SelectItem>
+                    <SelectItem value="solutions-architect">Solutions Architect</SelectItem>
+                    <SelectItem value="database-administrator">Database Administrator</SelectItem>
+                    <SelectItem value="network-engineer">Network Engineer</SelectItem>
+                    <SelectItem value="systems-administrator">Systems Administrator</SelectItem>
+                    <SelectItem value="game-developer">Game Developer</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -297,6 +328,73 @@ export const InterviewPractice = () => {
               </Button>
             </div>
           </Card>
+        ) : isInterviewComplete ? (
+          <div className="space-y-4">
+            <Card className="p-8 shadow-lg text-center">
+              <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="mb-6">
+                <Trophy className="w-16 h-16 text-accent mx-auto mb-4" />
+                <h3 className="text-2xl font-bold mb-2">Interview Complete!</h3>
+                <p className="text-muted-foreground">You answered {TOTAL_QUESTIONS} questions for <span className="font-semibold capitalize">{selectedRole.replace(/-/g, ' ')}</span></p>
+              </motion.div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+                <div className="p-4 bg-gradient-card border border-border rounded-lg">
+                  <div className={`text-3xl font-bold ${getPreparationLevel(averageScore).color}`}>{averageScore}/10</div>
+                  <p className="text-sm text-muted-foreground mt-1">Average Score</p>
+                </div>
+                <div className="p-4 bg-gradient-card border border-border rounded-lg">
+                  <div className={`text-lg font-bold ${getPreparationLevel(averageScore).color}`}>{getPreparationLevel(averageScore).level}</div>
+                  <p className="text-sm text-muted-foreground mt-1">Preparation Level</p>
+                </div>
+                <div className="p-4 bg-gradient-card border border-border rounded-lg">
+                  <div className="text-3xl font-bold text-primary">{TOTAL_QUESTIONS}</div>
+                  <p className="text-sm text-muted-foreground mt-1">Questions Answered</p>
+                </div>
+              </div>
+
+              {/* Score breakdown */}
+              <div className="mb-6 text-left">
+                <h4 className="font-semibold mb-3 flex items-center gap-2">
+                  <Target className="w-5 h-5 text-primary" />
+                  Score Breakdown
+                </h4>
+                <div className="space-y-2">
+                  {allScores.map((score, index) => (
+                    <div key={index} className="flex items-center gap-3 text-sm">
+                      <span className="text-muted-foreground w-24">Question {index + 1}</span>
+                      <div className="flex-1 bg-muted rounded-full h-2">
+                        <div className={`h-2 rounded-full ${score >= 8 ? 'bg-success' : score >= 6 ? 'bg-accent' : score >= 4 ? 'bg-warning' : 'bg-destructive'}`} style={{ width: `${score * 10}%` }} />
+                      </div>
+                      <span className="font-semibold w-10 text-right">{score}/10</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Areas to improve */}
+              {improvementAreas.length > 0 && (
+                <div className="mb-6 text-left">
+                  <h4 className="font-semibold mb-3 flex items-center gap-2">
+                    <AlertCircle className="w-5 h-5 text-destructive" />
+                    Areas to Improve
+                  </h4>
+                  <ul className="space-y-2">
+                    {improvementAreas.slice(0, 5).map((area, index) => (
+                      <li key={index} className="text-sm bg-destructive/10 p-3 rounded-lg flex items-start gap-2">
+                        <span className="text-destructive font-bold">{index + 1}.</span>
+                        <span>{area}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              <Button onClick={resetInterview} className="w-full bg-gradient-accent hover:opacity-90" size="lg">
+                <RotateCcw className="w-4 h-4 mr-2" />
+                Start New Interview
+              </Button>
+            </Card>
+          </div>
         ) : (
           <div className="space-y-4">
             <Card className="p-6 shadow-lg">
@@ -304,6 +402,7 @@ export const InterviewPractice = () => {
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 bg-success rounded-full animate-pulse" />
                   <span className="text-sm sm:text-base font-semibold">Interview in Progress</span>
+                  <span className="text-xs text-muted-foreground">({questionsAnswered}/{TOTAL_QUESTIONS} questions)</span>
                 </div>
                 <div className="flex gap-2">
                   <Button
@@ -321,6 +420,13 @@ export const InterviewPractice = () => {
                   <Button variant="outline" onClick={resetInterview} size="sm">
                     End
                   </Button>
+                </div>
+              </div>
+
+              {/* Progress bar */}
+              <div className="mb-4">
+                <div className="w-full bg-muted rounded-full h-2">
+                  <div className="bg-accent h-2 rounded-full transition-all" style={{ width: `${(questionsAnswered / TOTAL_QUESTIONS) * 100}%` }} />
                 </div>
               </div>
 
