@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { FileText, Target, MessageSquare, Linkedin, Sparkles, Search, BookOpen } from "lucide-react";
+import { FileText, Target, MessageSquare, Sparkles, Search, Briefcase } from "lucide-react";
 
 interface HeroSectionProps {
   onGetStarted: () => void;
@@ -34,16 +34,10 @@ export const HeroSection = ({ onGetStarted, onNavigate }: HeroSectionProps) => {
       section: "interview"
     },
     {
-      icon: Linkedin,
-      title: "LinkedIn Optimizer",
-      description: "Get actionable insights to enhance your LinkedIn profile",
-      section: "linkedin"
-    },
-    {
-      icon: BookOpen,
-      title: "Career Blog",
-      description: "Share and discover career tips from the community",
-      section: "blog"
+      icon: Briefcase,
+      title: "Our Services",
+      description: "Resume optimization, portfolio development, and professional guidance",
+      section: "services"
     }
   ];
 
@@ -135,15 +129,12 @@ export const HeroSection = ({ onGetStarted, onNavigate }: HeroSectionProps) => {
                 <p className="text-sm text-muted-foreground">+91 7676074209</p>
               </div>
               <div>
-                <h4 className="font-semibold mb-1">LinkedIn</h4>
+                <h4 className="font-semibold mb-1">Email</h4>
                 <a 
-                  href="https://www.linkedin.com/in/sayed-muhammed-jiyad-129935212/" 
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm text-[#0077B5] hover:underline flex items-center gap-1"
+                  href="mailto:sayedmuhammedjiyad@gmail.com" 
+                  className="text-sm text-primary hover:underline"
                 >
-                  <Linkedin className="w-4 h-4" />
-                  Connect with us
+                  sayedmuhammedjiyad@gmail.com
                 </a>
               </div>
             </div>
