@@ -24,6 +24,13 @@ interface Education {
   year: string;
 }
 
+interface Certification {
+  id: string;
+  name: string;
+  issuer: string;
+  year: string;
+}
+
 export const ResumeBuilder = () => {
   const { toast } = useToast();
   const [personalInfo, setPersonalInfo] = useState({
@@ -42,6 +49,10 @@ export const ResumeBuilder = () => {
     { id: "1", institution: "", degree: "", year: "" }
   ]);
   
+  const [certifications, setCertifications] = useState<Certification[]>([
+    { id: "1", name: "", issuer: "", year: "" }
+  ]);
+
   const [skills, setSkills] = useState("");
 
   const addExperience = () => {
@@ -69,6 +80,19 @@ export const ResumeBuilder = () => {
 
   const removeEducation = (id: string) => {
     setEducation(education.filter(edu => edu.id !== id));
+  };
+
+  const addCertification = () => {
+    setCertifications([...certifications, {
+      id: Date.now().toString(),
+      name: "",
+      issuer: "",
+      year: ""
+    }]);
+  };
+
+  const removeCertification = (id: string) => {
+    setCertifications(certifications.filter(cert => cert.id !== id));
   };
 
   const generatePDF = () => {
@@ -148,6 +172,27 @@ export const ResumeBuilder = () => {
       });
     }
     
+    // Certifications
+    if (certifications.some(cert => cert.name)) {
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "bold");
+      doc.text("Certifications", 20, yPosition);
+      yPosition += 8;
+      
+      certifications.forEach((cert) => {
+        if (cert.name) {
+          doc.setFontSize(11);
+          doc.setFont("helvetica", "bold");
+          doc.text(cert.name, 20, yPosition);
+          yPosition += 5;
+          doc.setFontSize(9);
+          doc.setFont("helvetica", "normal");
+          doc.text(`${cert.issuer}${cert.year ? ` | ${cert.year}` : ""}`, 20, yPosition);
+          yPosition += 8;
+        }
+      });
+    }
+
     // Skills
     if (skills) {
       doc.setFontSize(14);
@@ -352,6 +397,62 @@ export const ResumeBuilder = () => {
                       const updated = [...education];
                       updated[index].year = e.target.value;
                       setEducation(updated);
+                    }}
+                  />
+                </Card>
+              ))}
+            </div>
+
+            {/* Certifications */}
+            <div>
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-4">
+                <h3 className="text-lg sm:text-xl font-semibold text-primary">Certifications</h3>
+                <Button onClick={addCertification} size="sm" variant="outline">
+                  <Plus className="w-4 h-4 mr-1 sm:mr-2" /> <span className="hidden sm:inline">Add </span>Certification
+                </Button>
+              </div>
+              {certifications.map((cert, index) => (
+                <Card key={cert.id} className="p-4 mb-4 bg-muted/30">
+                  <div className="flex justify-between items-start mb-3">
+                    <h4 className="font-medium">Certification {index + 1}</h4>
+                    {certifications.length > 1 && (
+                      <Button
+                        onClick={() => removeCertification(cert.id)}
+                        size="sm"
+                        variant="ghost"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    )}
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <Input
+                      placeholder="Certification Name"
+                      value={cert.name}
+                      onChange={(e) => {
+                        const updated = [...certifications];
+                        updated[index].name = e.target.value;
+                        setCertifications(updated);
+                      }}
+                    />
+                    <Input
+                      placeholder="Issuing Organization"
+                      value={cert.issuer}
+                      onChange={(e) => {
+                        const updated = [...certifications];
+                        updated[index].issuer = e.target.value;
+                        setCertifications(updated);
+                      }}
+                    />
+                  </div>
+                  <Input
+                    className="mt-3"
+                    placeholder="Year (e.g., 2023)"
+                    value={cert.year}
+                    onChange={(e) => {
+                      const updated = [...certifications];
+                      updated[index].year = e.target.value;
+                      setCertifications(updated);
                     }}
                   />
                 </Card>
