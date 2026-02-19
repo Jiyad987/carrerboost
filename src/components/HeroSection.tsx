@@ -77,7 +77,7 @@ export const HeroSection = ({ onGetStarted, onNavigate }: HeroSectionProps) => {
             <Button 
               size="lg" 
               variant="outline"
-              onClick={() => window.open('https://wa.me/917676074209', '_blank')}
+              onClick={() => window.location.href = 'https://wa.me/917676074209?text=Hi%20Panikittum%2C%20I%20need%20help%20with%20my%20career.'}
             >
               Contact Us
             </Button>
