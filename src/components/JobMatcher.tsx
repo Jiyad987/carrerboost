@@ -8,9 +8,10 @@ import { Progress } from "@/components/ui/progress";
 import { CheckCircle2, XCircle, AlertCircle, TrendingUp, Upload, FileText, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import * as pdfjsLib from "pdfjs-dist";
+import pdfjsWorker from "pdfjs-dist/build/pdf.worker.min.mjs?url";
 
 // Set up PDF.js worker
-pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
 interface AnalysisResult {
   matchScore: number;
@@ -74,10 +75,14 @@ export const JobMatcher = () => {
 
     try {
       const text = await extractTextFromPdf(file);
+      if (!text.trim()) {
+        throw new Error("No text could be extracted from this PDF. It may be an image-based or scanned PDF.");
+      }
+      console.log("Extracted Resume Text:", text);
       setResumeText(text);
       toast({
         title: "PDF Uploaded!",
-        description: "Your resume has been extracted successfully.",
+        description: `Resume extracted successfully (${text.length} characters from ${file.name}).`,
       });
     } catch (error) {
       console.error("Error extracting PDF:", error);
