@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { FileText, Target, MessageSquare, Sparkles, Search, Briefcase } from "lucide-react";
+import { FileText, Target, MessageSquare, Sparkles, Briefcase, ArrowRight, Code2, Zap } from "lucide-react";
 
 interface HeroSectionProps {
   onGetStarted: () => void;
@@ -13,135 +13,198 @@ export const HeroSection = ({ onGetStarted, onNavigate }: HeroSectionProps) => {
       icon: FileText,
       title: "ATS-Friendly Resume Builder",
       description: "Create professional resumes optimized for Applicant Tracking Systems",
-      section: "resume"
-    },
-    {
-      icon: Search,
-      title: "AI Job Finder",
-      description: "Find jobs, get HR contacts, and generate cover letters with AI",
-      section: "jobs"
+      section: "resume",
+      tag: "builder",
+      color: "text-primary",
+      bg: "bg-primary/10 border-primary/20",
     },
     {
       icon: Target,
       title: "Job Match Analyzer",
-      description: "Compare your resume with job descriptions and get match scores",
-      section: "matcher"
+      description: "Compare your resume with job descriptions and get match scores + roast",
+      section: "matcher",
+      tag: "analyzer",
+      color: "text-secondary",
+      bg: "bg-secondary/10 border-secondary/20",
     },
     {
       icon: MessageSquare,
       title: "Interview Practice",
-      description: "Prepare with role-specific interview questions and tips",
-      section: "interview"
+      description: "Prepare with role-specific interview questions and expert tips",
+      section: "interview",
+      tag: "practice",
+      color: "text-accent",
+      bg: "bg-accent/10 border-accent/20",
     },
     {
       icon: Briefcase,
       title: "Our Services",
       description: "Resume optimization, portfolio development, and professional guidance",
-      section: "services"
-    }
+      section: "services",
+      tag: "services",
+      color: "text-warning",
+      bg: "bg-warning/10 border-warning/20",
+    },
   ];
 
   return (
     <div className="relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-hero opacity-5" />
+      {/* Background dot grid */}
+      <div className="absolute inset-0 dot-grid opacity-40" />
       
+      {/* Gradient blobs */}
+      <div className="absolute top-20 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-40 right-1/4 w-64 h-64 bg-secondary/10 rounded-full blur-3xl pointer-events-none" />
+
       <div className="container mx-auto px-4 py-20 relative">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.5 }}
           className="text-center max-w-4xl mx-auto mb-16"
         >
+          {/* Badge */}
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.2 }}
-            className="inline-flex items-center gap-2 bg-gradient-accent text-accent-foreground px-4 py-2 rounded-full text-sm font-semibold mb-6 shadow-glow"
+            transition={{ delay: 0.1 }}
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-mono font-medium mb-8 border border-primary/30 bg-primary/5 text-primary"
           >
-            <Sparkles className="w-4 h-4" />
-            Your Career Success Platform
+            <Zap className="w-3 h-3" />
+            AI-Powered Career Platform
+            <Code2 className="w-3 h-3" />
           </motion.div>
-          
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 bg-gradient-hero bg-clip-text text-transparent leading-tight px-2">
-            Land Your Dream Job with AI-Powered Career Tools
+
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-[1.1] tracking-tight">
+            Land Your{" "}
+            <span className="bg-gradient-hero bg-clip-text text-transparent">
+              Dream Job
+            </span>
+            <br />
+            with AI-Powered Tools
           </h1>
-          
-          <p className="text-base sm:text-lg md:text-xl text-muted-foreground mb-6 sm:mb-8 leading-relaxed px-2">
-            Build ATS-optimized resumes, practice interviews, analyze job matches, and optimize your LinkedIn profile—all in one powerful platform.
+
+          <p className="text-base sm:text-lg text-muted-foreground mb-8 leading-relaxed max-w-2xl mx-auto">
+            Build ATS-optimized resumes, get your resume roasted, practice interviews, and analyze job matches — all in one powerful platform.
           </p>
-          
-          <div className="flex gap-4 justify-center flex-wrap">
-            <Button size="lg" variant="gradient" onClick={onGetStarted}>
+
+          <div className="flex gap-3 justify-center flex-wrap">
+            <Button size="lg" variant="gradient" onClick={onGetStarted} className="gap-2">
               Get Started Free
+              <ArrowRight className="w-4 h-4" />
             </Button>
-            <Button 
-              size="lg" 
+            <Button
+              size="lg"
               variant="outline"
               onClick={() => window.location.href = 'https://wa.me/917676074209?text=Hi%20Panikittum%2C%20I%20need%20help%20with%20my%20career.'}
             >
               Contact Us
             </Button>
           </div>
-          
-          <p className="text-sm text-muted-foreground mt-6 max-w-2xl mx-auto">
-            🔒 No login required • Your privacy is our priority • All tools work offline
+
+          <p className="text-xs text-muted-foreground mt-5 font-mono">
+            // No login required · Privacy first · All tools work offline
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-7xl mx-auto px-2">
+        {/* Feature Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-6xl mx-auto mb-20">
           {features.map((feature, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 + index * 0.1 }}
+              transition={{ delay: 0.2 + index * 0.08 }}
               onClick={() => onNavigate(feature.section)}
-              className="bg-card rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 border border-border group hover:border-accent cursor-pointer"
+              className="group relative bg-card rounded-xl p-5 border border-border hover:border-primary/30 transition-all duration-300 cursor-pointer hover:shadow-lg hover:-translate-y-1"
             >
-              <div className="bg-gradient-accent w-12 h-12 rounded-lg flex items-center justify-center mb-4 shadow-glow group-hover:scale-110 transition-transform">
-                <feature.icon className="w-6 h-6 text-accent-foreground" />
+              <div className={`inline-flex items-center justify-center w-10 h-10 rounded-lg border ${feature.bg} mb-4`}>
+                <feature.icon className={`w-5 h-5 ${feature.color}`} />
               </div>
-              <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
-              <p className="text-sm text-muted-foreground">{feature.description}</p>
+              <div className="font-mono text-[10px] text-muted-foreground mb-1">
+                ./{feature.tag}
+              </div>
+              <h3 className="text-sm font-semibold mb-2 leading-snug">{feature.title}</h3>
+              <p className="text-xs text-muted-foreground leading-relaxed">{feature.description}</p>
+              <div className="mt-4 flex items-center gap-1 text-xs text-primary font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+                Open <ArrowRight className="w-3 h-3" />
+              </div>
             </motion.div>
           ))}
         </div>
 
+        {/* Stats */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8 }}
-          className="mt-16 bg-card rounded-2xl p-8 shadow-lg border border-border max-w-3xl mx-auto"
+          transition={{ delay: 0.6 }}
+          className="flex flex-wrap items-center justify-center gap-px max-w-lg mx-auto bg-border rounded-xl overflow-hidden mb-16"
         >
-          <h3 className="text-xl sm:text-2xl font-bold text-center mb-4 sm:mb-6">Contact Us</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-            <div className="space-y-3">
-              <div>
-                <h4 className="font-semibold mb-1">Company</h4>
-                <p className="text-sm text-muted-foreground">Eduwants Global</p>
-              </div>
-              <div>
-                <h4 className="font-semibold mb-1">Location</h4>
-                <p className="text-sm text-muted-foreground">Kochi, Kerala</p>
-              </div>
-              <div>
-                <h4 className="font-semibold mb-1">Phone</h4>
-                <p className="text-sm text-muted-foreground">+91 7676074209</p>
-              </div>
-              <div>
-                <h4 className="font-semibold mb-1">Email</h4>
-                <a 
-                  href="mailto:sayedmuhammedjiyad@gmail.com" 
-                  className="text-sm text-primary hover:underline"
-                >
+          {[
+            { value: "10K+", label: "Resumes Created" },
+            { value: "95%", label: "ATS Pass Rate" },
+            { value: "5K+", label: "Job Matches" },
+          ].map((stat, i) => (
+            <div key={i} className="flex-1 min-w-[100px] bg-card px-6 py-4 text-center">
+              <div className="text-xl font-bold font-mono text-primary">{stat.value}</div>
+              <div className="text-xs text-muted-foreground mt-0.5">{stat.label}</div>
+            </div>
+          ))}
+        </motion.div>
+
+        {/* Contact Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.7 }}
+          className="bg-card rounded-2xl border border-border p-8 max-w-3xl mx-auto shadow-lg"
+        >
+          <div className="flex items-center gap-2 mb-6">
+            <div className="w-2 h-2 rounded-full bg-success animate-pulse" />
+            <h3 className="text-xl font-bold">Contact Us</h3>
+            <span className="font-mono text-xs text-muted-foreground ml-auto">// we're online</span>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-4">
+              {[
+                { label: "Company", value: "Eduwants Global" },
+                { label: "Location", value: "Kochi, Kerala" },
+                { label: "Phone", value: "+91 7676074209" },
+              ].map(({ label, value }) => (
+                <div key={label} className="flex items-center gap-3">
+                  <span className="text-xs font-mono text-muted-foreground w-16">{label}</span>
+                  <span className="text-sm font-medium text-foreground">{value}</span>
+                </div>
+              ))}
+              <div className="flex items-center gap-3">
+                <span className="text-xs font-mono text-muted-foreground w-16">Email</span>
+                <a href="mailto:sayedmuhammedjiyad@gmail.com" className="text-sm text-primary hover:underline">
                   sayedmuhammedjiyad@gmail.com
                 </a>
               </div>
+              <div className="flex gap-2 pt-2">
+                <Button
+                  size="sm"
+                  variant="success"
+                  onClick={() => window.location.href = 'https://wa.me/917676074209?text=Hi%20Panikittum%2C%20I%20need%20help%20with%20my%20career.'}
+                  className="flex-1 text-xs"
+                >
+                  WhatsApp
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => window.location.href = 'mailto:sayedmuhammedjiyad@gmail.com?subject=Career%20Help%20Request&body=Hi%20Panikittum%2C%20I%20need%20help%20with%20my%20career.'}
+                  className="flex-1 text-xs"
+                >
+                  Email Us
+                </Button>
+              </div>
             </div>
             <div>
-              <h4 className="font-semibold mb-3">Send us a message</h4>
-              <form 
-                action={`https://formsubmit.co/jiyadsayydu@gmail.com`}
+              <p className="text-xs font-mono text-muted-foreground mb-3">// send_message()</p>
+              <form
+                action="https://formsubmit.co/jiyadsayydu@gmail.com"
                 method="POST"
                 className="space-y-3"
               >
@@ -150,50 +213,26 @@ export const HeroSection = ({ onGetStarted, onNavigate }: HeroSectionProps) => {
                   name="name"
                   placeholder="Your Name"
                   required
-                  className="w-full px-3 py-2 text-sm border border-border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-accent"
+                  className="w-full px-3 py-2 text-sm border border-border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary/30 font-mono placeholder:font-sans"
                 />
                 <input
                   type="email"
                   name="email"
-                  placeholder="Your Email"
+                  placeholder="your@email.com"
                   required
-                  className="w-full px-3 py-2 text-sm border border-border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-accent"
+                  className="w-full px-3 py-2 text-sm border border-border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary/30 font-mono placeholder:font-sans"
                 />
                 <textarea
                   name="message"
-                  placeholder="Your Message"
+                  placeholder="Your message..."
                   required
                   rows={3}
-                  className="w-full px-3 py-2 text-sm border border-border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-accent resize-none"
+                  className="w-full px-3 py-2 text-sm border border-border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary/30 resize-none"
                 />
-                <Button type="submit" className="w-full" variant="gradient">
+                <Button type="submit" className="w-full" variant="gradient" size="sm">
                   Send Message
                 </Button>
               </form>
-            </div>
-          </div>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.8 }}
-          className="mt-12 sm:mt-20 text-center px-2"
-        >
-          <div className="inline-flex flex-col sm:flex-row items-center gap-4 sm:gap-8 px-6 sm:px-8 py-4 sm:py-6 bg-muted/50 rounded-2xl backdrop-blur-sm">
-            <div>
-              <div className="text-2xl sm:text-3xl font-bold text-primary">10K+</div>
-              <div className="text-xs sm:text-sm text-muted-foreground">Resumes Created</div>
-            </div>
-            <div className="w-16 h-px sm:h-12 sm:w-px bg-border" />
-            <div>
-              <div className="text-2xl sm:text-3xl font-bold text-secondary">95%</div>
-              <div className="text-xs sm:text-sm text-muted-foreground">ATS Pass Rate</div>
-            </div>
-            <div className="w-16 h-px sm:h-12 sm:w-px bg-border" />
-            <div>
-              <div className="text-2xl sm:text-3xl font-bold text-accent">5K+</div>
-              <div className="text-xs sm:text-sm text-muted-foreground">Job Matches</div>
             </div>
           </div>
         </motion.div>
