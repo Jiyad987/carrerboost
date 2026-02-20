@@ -2,34 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 @layer base {
   :root {
-    --background: 220 25% 97%;
-    --foreground: 235 30% 15%;
+    --background: 220 20% 97%;
+    --foreground: 220 30% 8%;
 
     --card: 0 0% 100%;
-    --card-foreground: 235 30% 15%;
+    --card-foreground: 220 30% 8%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 235 30% 15%;
+    --popover-foreground: 220 30% 8%;
 
-    --primary: 237 55% 25%;
+    --primary: 217 91% 60%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 176 60% 55%;
-    --secondary-foreground: 235 30% 15%;
+    --secondary: 160 84% 39%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 220 15% 92%;
-    --muted-foreground: 235 15% 45%;
+    --muted: 220 14% 93%;
+    --muted-foreground: 220 10% 45%;
 
-    --accent: 176 70% 48%;
+    --accent: 217 91% 60%;
     --accent-foreground: 0 0% 100%;
 
-    --success: 142 70% 45%;
+    --success: 160 84% 39%;
     --success-foreground: 0 0% 100%;
 
     --warning: 38 92% 50%;
@@ -38,65 +36,65 @@ All colors MUST be HSL.
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 20% 88%;
-    --input: 220 20% 88%;
-    --ring: 237 55% 25%;
+    --border: 220 13% 88%;
+    --input: 220 13% 88%;
+    --ring: 217 91% 60%;
 
-    --radius: 0.75rem;
+    --radius: 0.5rem;
 
-    --gradient-hero: linear-gradient(135deg, hsl(237 55% 25%), hsl(237 55% 35%), hsl(176 60% 45%));
-    --gradient-card: linear-gradient(180deg, hsl(0 0% 100%), hsl(220 25% 98%));
-    --gradient-accent: linear-gradient(135deg, hsl(176 70% 48%), hsl(176 60% 58%));
+    --gradient-hero: linear-gradient(135deg, hsl(217 91% 60%), hsl(160 84% 39%));
+    --gradient-card: linear-gradient(180deg, hsl(0 0% 100%), hsl(220 20% 98%));
+    --gradient-accent: linear-gradient(135deg, hsl(217 91% 60%), hsl(217 91% 50%));
     
-    --shadow-sm: 0 2px 8px hsl(237 55% 25% / 0.05);
-    --shadow-md: 0 4px 16px hsl(237 55% 25% / 0.08);
-    --shadow-lg: 0 8px 32px hsl(237 55% 25% / 0.12);
-    --shadow-glow: 0 0 40px hsl(176 60% 55% / 0.2);
+    --shadow-sm: 0 1px 3px hsl(220 30% 8% / 0.06), 0 1px 2px hsl(220 30% 8% / 0.04);
+    --shadow-md: 0 4px 6px hsl(220 30% 8% / 0.07), 0 2px 4px hsl(220 30% 8% / 0.05);
+    --shadow-lg: 0 10px 15px hsl(220 30% 8% / 0.1), 0 4px 6px hsl(220 30% 8% / 0.06);
+    --shadow-glow: 0 0 20px hsl(217 91% 60% / 0.25), 0 0 40px hsl(217 91% 60% / 0.1);
   }
 
   .dark {
-    --background: 235 30% 10%;
-    --foreground: 220 15% 95%;
+    --background: 222 47% 6%;
+    --foreground: 213 31% 91%;
 
-    --card: 235 25% 13%;
-    --card-foreground: 220 15% 95%;
+    --card: 222 40% 9%;
+    --card-foreground: 213 31% 91%;
 
-    --popover: 235 25% 13%;
-    --popover-foreground: 220 15% 95%;
+    --popover: 222 40% 9%;
+    --popover-foreground: 213 31% 91%;
 
-    --primary: 176 60% 55%;
-    --primary-foreground: 235 30% 10%;
+    --primary: 217 91% 60%;
+    --primary-foreground: 222 47% 6%;
 
-    --secondary: 237 45% 22%;
-    --secondary-foreground: 220 15% 95%;
+    --secondary: 160 84% 39%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 235 20% 18%;
-    --muted-foreground: 220 10% 65%;
+    --muted: 222 35% 14%;
+    --muted-foreground: 215 20% 55%;
 
-    --accent: 176 70% 48%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 217 91% 60%;
+    --accent-foreground: 222 47% 6%;
 
-    --success: 142 65% 50%;
-    --success-foreground: 235 30% 10%;
+    --success: 160 84% 39%;
+    --success-foreground: 0 0% 100%;
 
     --warning: 38 90% 55%;
-    --warning-foreground: 235 30% 10%;
+    --warning-foreground: 222 47% 6%;
 
     --destructive: 0 65% 55%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 235 20% 20%;
-    --input: 235 20% 20%;
-    --ring: 176 60% 55%;
+    --border: 222 30% 16%;
+    --input: 222 30% 16%;
+    --ring: 217 91% 60%;
 
-    --gradient-hero: linear-gradient(135deg, hsl(176 60% 55%), hsl(176 50% 45%), hsl(237 55% 35%));
-    --gradient-card: linear-gradient(180deg, hsl(235 25% 13%), hsl(235 25% 15%));
-    --gradient-accent: linear-gradient(135deg, hsl(176 70% 48%), hsl(176 60% 58%));
+    --gradient-hero: linear-gradient(135deg, hsl(217 91% 60%), hsl(160 84% 39%));
+    --gradient-card: linear-gradient(180deg, hsl(222 40% 9%), hsl(222 40% 11%));
+    --gradient-accent: linear-gradient(135deg, hsl(217 91% 60%), hsl(217 91% 50%));
     
-    --shadow-sm: 0 2px 8px hsl(0 0% 0% / 0.2);
-    --shadow-md: 0 4px 16px hsl(0 0% 0% / 0.3);
-    --shadow-lg: 0 8px 32px hsl(0 0% 0% / 0.4);
-    --shadow-glow: 0 0 40px hsl(176 60% 55% / 0.3);
+    --shadow-sm: 0 1px 3px hsl(0 0% 0% / 0.3), 0 1px 2px hsl(0 0% 0% / 0.2);
+    --shadow-md: 0 4px 6px hsl(0 0% 0% / 0.4), 0 2px 4px hsl(0 0% 0% / 0.3);
+    --shadow-lg: 0 10px 15px hsl(0 0% 0% / 0.5), 0 4px 6px hsl(0 0% 0% / 0.35);
+    --shadow-glow: 0 0 20px hsl(217 91% 60% / 0.35), 0 0 60px hsl(217 91% 60% / 0.15);
   }
 }
 
@@ -107,13 +105,41 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+    font-feature-settings: "cv11", "ss01";
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Outfit', sans-serif;
+    font-family: 'Space Grotesk', sans-serif;
     font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  code, pre, .mono {
+    font-family: 'JetBrains Mono', monospace;
   }
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap');
+@layer utilities {
+  .text-gradient {
+    @apply bg-gradient-hero bg-clip-text text-transparent;
+  }
+
+  .card-glass {
+    @apply bg-card/80 backdrop-blur-sm border border-border;
+  }
+
+  .glow-line {
+    background: linear-gradient(90deg, transparent, hsl(var(--primary)), transparent);
+    height: 1px;
+  }
+
+  .dot-grid {
+    background-image: radial-gradient(circle, hsl(var(--border)) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+
+  .code-tag {
+    @apply font-mono text-xs px-2 py-0.5 rounded bg-muted text-muted-foreground;
+  }
+}
