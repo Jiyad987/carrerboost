@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { FileText, Globe, UserCheck, Lightbulb, TrendingUp, MessageCircle, Mail } from "lucide-react";
+import { FileText, Globe, UserCheck, Lightbulb, TrendingUp, MessageCircle, Mail, Instagram, Facebook, Linkedin, Twitter } from "lucide-react";
 
 export const Services = () => {
   const services = [
@@ -29,6 +29,7 @@ export const Services = () => {
       icon: TrendingUp,
       title: "Social Media Management",
       description: "We help businesses manage and optimize their social media profiles to improve digital presence and reach.",
+      socialLogos: true,
     },
   ];
 
@@ -62,6 +63,14 @@ export const Services = () => {
                 </div>
                 <h3 className="text-lg font-semibold mb-2">{service.title}</h3>
                 <p className="text-sm text-muted-foreground">{service.description}</p>
+                {(service as any).socialLogos && (
+                  <div className="flex items-center gap-3 mt-3 pt-3 border-t border-border">
+                    <Linkedin className="w-5 h-5 text-[#0A66C2]" />
+                    <Facebook className="w-5 h-5 text-[#1877F2]" />
+                    <Instagram className="w-5 h-5 text-[#E4405F]" />
+                    <Twitter className="w-5 h-5 text-[#1DA1F2]" />
+                  </div>
+                )}
               </Card>
             </motion.div>
           ))}

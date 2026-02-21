@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { MessageSquare, Send, Loader2, Sparkles, Mic, MicOff, Volume2, VolumeX, Trophy, RotateCcw, Target, AlertCircle } from "lucide-react";
+import { MessageSquare, Send, Loader2, Sparkles, Mic, MicOff, Volume2, VolumeX, Trophy, RotateCcw, Target, AlertCircle, FileText, Briefcase } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -16,6 +16,8 @@ interface Message {
 
 export const InterviewPractice = () => {
   const [selectedRole, setSelectedRole] = useState("");
+  const [resumeText, setResumeText] = useState("");
+  const [rolesAndResponsibilities, setRolesAndResponsibilities] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -149,6 +151,8 @@ export const InterviewPractice = () => {
         body: {
           messages: [{ role: 'user', content: 'Hello! I am ready to start the interview.' }],
           role: selectedRole,
+          resumeText: resumeText || undefined,
+          rolesAndResponsibilities: rolesAndResponsibilities || undefined,
         }
       });
 
@@ -184,6 +188,8 @@ export const InterviewPractice = () => {
         body: {
           messages: [...messages, userMessage],
           role: selectedRole,
+          resumeText: resumeText || undefined,
+          rolesAndResponsibilities: rolesAndResponsibilities || undefined,
         }
       });
 
@@ -227,6 +233,8 @@ export const InterviewPractice = () => {
     setMessages([]);
     setIsStarted(false);
     setInputText("");
+    setResumeText("");
+    setRolesAndResponsibilities("");
     setFeedback(null);
     setAllScores([]);
     setQuestionsAnswered(0);
@@ -269,7 +277,7 @@ export const InterviewPractice = () => {
             <div className="space-y-6">
               <div>
                 <Label htmlFor="role" className="text-lg font-semibold">
-                  Select Your Target Role
+                  Select Your Target Role <span className="text-destructive">*</span>
                 </Label>
                 <Select value={selectedRole} onValueChange={setSelectedRole}>
                   <SelectTrigger id="role" className="w-full mt-2">
@@ -307,6 +315,38 @@ export const InterviewPractice = () => {
                     <SelectItem value="game-developer">Game Developer</SelectItem>
                   </SelectContent>
                 </Select>
+              </div>
+
+              <div>
+                <Label htmlFor="resume" className="text-sm font-semibold flex items-center gap-2">
+                  <FileText className="w-4 h-4 text-primary" />
+                  Your Resume / CV
+                  <span className="text-xs text-muted-foreground font-normal">(optional)</span>
+                </Label>
+                <Textarea
+                  id="resume"
+                  value={resumeText}
+                  onChange={(e) => setResumeText(e.target.value)}
+                  placeholder="Paste your resume text here... This helps the AI ask questions specific to your experience and skills."
+                  className="mt-2 min-h-[100px] resize-none font-mono text-xs"
+                  rows={5}
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="responsibilities" className="text-sm font-semibold flex items-center gap-2">
+                  <Briefcase className="w-4 h-4 text-secondary" />
+                  Roles & Responsibilities
+                  <span className="text-xs text-muted-foreground font-normal">(optional)</span>
+                </Label>
+                <Textarea
+                  id="responsibilities"
+                  value={rolesAndResponsibilities}
+                  onChange={(e) => setRolesAndResponsibilities(e.target.value)}
+                  placeholder="Paste the job description or roles & responsibilities of the target company... The AI will tailor questions accordingly."
+                  className="mt-2 min-h-[100px] resize-none font-mono text-xs"
+                  rows={5}
+                />
               </div>
               
               <Button 
