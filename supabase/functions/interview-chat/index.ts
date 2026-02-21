@@ -12,7 +12,7 @@ serve(async (req) => {
   }
 
   try {
-    const { messages, role } = await req.json();
+    const { messages, role, resumeText, rolesAndResponsibilities } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     
     if (!LOVABLE_API_KEY) {
@@ -52,7 +52,15 @@ serve(async (req) => {
       "ui-ux-designer": "You are an experienced interviewer for UI/UX design positions. Ask about user research, design thinking, prototyping, and usability. Score answers out of 10 with feedback. Evaluate creativity, user empathy, and design process. Ask one question at a time."
     };
 
-    const systemPrompt = rolePrompts[role as keyof typeof rolePrompts] || rolePrompts["software-engineer"];
+    let systemPrompt = rolePrompts[role as keyof typeof rolePrompts] || rolePrompts["software-engineer"];
+
+    if (resumeText) {
+      systemPrompt += `\n\nThe candidate has provided their resume. Use it to ask targeted questions about their specific experience, projects, and skills mentioned in their resume:\n\n${resumeText}`;
+    }
+
+    if (rolesAndResponsibilities) {
+      systemPrompt += `\n\nThe candidate is preparing for a role with these specific responsibilities. Tailor your questions to assess their fit for these requirements:\n\n${rolesAndResponsibilities}`;
+    }
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",

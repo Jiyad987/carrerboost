@@ -103,7 +103,7 @@ export const HeroSection = ({ onGetStarted, onNavigate }: HeroSectionProps) => {
           </div>
 
           <p className="text-xs text-muted-foreground mt-5 font-mono">
-            // No login required · Privacy first · All tools work offline
+            // No login required · Privacy first · <span className="text-primary font-semibold">Resume Building</span> · <span className="text-secondary font-semibold">Interview Prep</span> · <span className="text-accent font-semibold">Career Services</span>
           </p>
         </motion.div>
 
