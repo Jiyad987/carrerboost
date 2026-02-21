@@ -17,7 +17,7 @@ const Index = () => {
   const navItems = [
     { id: "home", label: "Home" },
     { id: "resume", label: "Resume" },
-    { id: "matcher", label: "Matcher" },
+    { id: "matcher", label: "Roast Resume" },
     { id: "interview", label: "Interview" },
     { id: "services", label: "Services" },
   ];

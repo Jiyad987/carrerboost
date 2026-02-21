@@ -34,7 +34,7 @@ interface AnalysisResult {
   roastComments: string[];
 }
 
-type Mode = "analyze" | "roast";
+type Mode = "roast";
 
 const roastPool = [
   "🔥 This resume is so generic it could apply for literally any job, including 'Professional Napkin'.",
@@ -107,7 +107,7 @@ export const JobMatcher = () => {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [isExtractingPdf, setIsExtractingPdf] = useState(false);
   const [uploadedFileName, setUploadedFileName] = useState<string | null>(null);
-  const [mode, setMode] = useState<Mode>("analyze");
+  const [mode] = useState<Mode>("roast");
   const [expandedSection, setExpandedSection] = useState<string | null>("actionItems");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -301,51 +301,25 @@ export const JobMatcher = () => {
 
         {/* Header */}
         <div className="text-center mb-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono border border-border text-muted-foreground mb-4">
-            <Code2 className="w-3 h-3" />
-            job_matcher.analyze()
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono border border-destructive/30 text-destructive mb-4">
+            <Flame className="w-3 h-3" />
+            resume_roast.execute()
           </div>
-          <h2 className="text-3xl sm:text-4xl font-bold mb-3 tracking-tight">Job Description Matcher</h2>
+          <h2 className="text-3xl sm:text-4xl font-bold mb-3 tracking-tight">Roast My Resume 🔥</h2>
           <p className="text-muted-foreground text-sm max-w-xl mx-auto">
-            Compare your resume, get a detailed improvement report, or get brutally roasted by AI
+            Upload your resume and a job description — get brutally roasted with zero mercy
           </p>
         </div>
 
-        {/* Mode Toggle */}
-        <div className="flex justify-center mb-8">
-          <div className="flex items-center gap-1 p-1 bg-muted rounded-lg border border-border">
-            <button
-              onClick={() => setMode("analyze")}
-              className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${
-                mode === "analyze" ? "bg-card text-foreground shadow-sm border border-border" : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              <Target className="w-4 h-4" />
-              Analyze Match
-            </button>
-            <button
-              onClick={() => setMode("roast")}
-              className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${
-                mode === "roast" ? "bg-destructive/10 text-destructive shadow-sm border border-destructive/20" : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              <Flame className="w-4 h-4" />
-              Roast My Resume 🔥
-            </button>
-          </div>
-        </div>
-
-        {mode === "roast" && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mb-6 p-4 rounded-xl border border-destructive/20 bg-destructive/5 text-center"
-          >
-            <p className="text-sm text-destructive font-medium">
-              🔥 Roast mode: AI will brutally (but helpfully) judge your resume with zero mercy
-            </p>
-          </motion.div>
-        )}
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-6 p-4 rounded-xl border border-destructive/20 bg-destructive/5 text-center"
+        >
+          <p className="text-sm text-destructive font-medium">
+            🔥 AI will brutally (but helpfully) judge your resume with zero mercy
+          </p>
+        </motion.div>
 
         {/* Input Area */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
@@ -396,16 +370,14 @@ export const JobMatcher = () => {
           <Button
             onClick={runAnalysis}
             size="lg"
-            variant={mode === "roast" ? "roast" : "gradient"}
+            variant="roast"
             disabled={isAnalyzing}
             className="gap-2 min-w-48"
           >
             {isAnalyzing ? (
-              <><Loader2 className="w-5 h-5 animate-spin" />Analyzing...</>
-            ) : mode === "roast" ? (
-              <><Flame className="w-5 h-5" />Roast Me!</>
+              <><Loader2 className="w-5 h-5 animate-spin" />Roasting...</>
             ) : (
-              <><Zap className="w-5 h-5" />Analyze Match</>
+              <><Flame className="w-5 h-5" />Roast My Resume 🔥</>
             )}
           </Button>
         </div>
@@ -452,8 +424,8 @@ export const JobMatcher = () => {
                 </div>
               </Card>
 
-              {/* Roast Section */}
-              {mode === "roast" && (
+              {/* Roast Section — always shown */}
+              {(
                 <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}>
                   <Card className="p-6 border-destructive/30 bg-destructive/5 shadow-lg">
                     <div className="flex items-center gap-2 mb-5">

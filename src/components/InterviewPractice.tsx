@@ -5,9 +5,13 @@ import { Card } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { MessageSquare, Send, Loader2, Sparkles, Mic, MicOff, Volume2, VolumeX, Trophy, RotateCcw, Target, AlertCircle, FileText, Briefcase } from "lucide-react";
+import { MessageSquare, Send, Loader2, Sparkles, Mic, MicOff, Volume2, VolumeX, Trophy, RotateCcw, Target, AlertCircle, FileText, Briefcase, Upload } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import * as pdfjsLib from "pdfjs-dist";
+import pdfjsWorker from "pdfjs-dist/build/pdf.worker.min.mjs?url";
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
 interface Message {
   role: 'user' | 'assistant';
@@ -29,10 +33,13 @@ export const InterviewPractice = () => {
   const [questionsAnswered, setQuestionsAnswered] = useState(0);
   const [isInterviewComplete, setIsInterviewComplete] = useState(false);
   const [improvementAreas, setImprovementAreas] = useState<string[]>([]);
+  const [isExtractingPdf, setIsExtractingPdf] = useState(false);
+  const [uploadedFileName, setUploadedFileName] = useState<string | null>(null);
   const TOTAL_QUESTIONS = 5;
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<any>(null);
   const silenceTimerRef = useRef<any>(null);
+  const resumeFileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
   const scrollToBottom = () => {
@@ -103,6 +110,42 @@ export const InterviewPractice = () => {
       }
     };
   }, [toast]);
+
+  const extractTextFromPdf = async (file: File): Promise<string> => {
+    const arrayBuffer = await file.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+    let fullText = "";
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const page = await pdf.getPage(i);
+      const textContent = await page.getTextContent();
+      const pageText = textContent.items.map((item: any) => item.str).join(" ");
+      fullText += pageText + "\n";
+    }
+    return fullText;
+  };
+
+  const handleResumeFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    if (file.type !== "application/pdf") {
+      toast({ title: "Invalid File", description: "Please upload a PDF file.", variant: "destructive" });
+      return;
+    }
+    setIsExtractingPdf(true);
+    setUploadedFileName(file.name);
+    try {
+      const text = await extractTextFromPdf(file);
+      if (!text.trim()) throw new Error("No text extracted");
+      setResumeText(text);
+      toast({ title: "PDF Extracted!", description: `${text.length} characters extracted from ${file.name}` });
+    } catch (error) {
+      console.error("PDF extraction error:", error);
+      toast({ title: "Extraction Failed", description: "Try pasting your resume text manually.", variant: "destructive" });
+      setUploadedFileName(null);
+    } finally {
+      setIsExtractingPdf(false);
+    }
+  };
 
   const speak = (text: string) => {
     if (!isSpeechEnabled || !('speechSynthesis' in window)) return;
@@ -318,17 +361,31 @@ export const InterviewPractice = () => {
               </div>
 
               <div>
-                <Label htmlFor="resume" className="text-sm font-semibold flex items-center gap-2">
-                  <FileText className="w-4 h-4 text-primary" />
-                  Your Resume / CV
-                  <span className="text-xs text-muted-foreground font-normal">(optional)</span>
-                </Label>
+                <div className="flex items-center justify-between mb-2">
+                  <Label htmlFor="resume" className="text-sm font-semibold flex items-center gap-2">
+                    <FileText className="w-4 h-4 text-primary" />
+                    Your Resume / CV
+                    <span className="text-xs text-muted-foreground font-normal">(optional)</span>
+                  </Label>
+                  <div className="flex items-center gap-2">
+                    <input type="file" accept=".pdf" onChange={handleResumeFileUpload} ref={resumeFileInputRef} className="hidden" />
+                    <Button variant="outline" size="sm" onClick={() => resumeFileInputRef.current?.click()} disabled={isExtractingPdf} className="h-7 text-xs">
+                      {isExtractingPdf ? <><Loader2 className="w-3 h-3 mr-1 animate-spin" />Extracting</> : <><Upload className="w-3 h-3 mr-1" />Upload PDF</>}
+                    </Button>
+                  </div>
+                </div>
+                {uploadedFileName && (
+                  <div className="flex items-center gap-2 mb-2 text-xs text-muted-foreground bg-muted/50 rounded px-3 py-1.5 font-mono">
+                    <FileText className="w-3 h-3" />
+                    {uploadedFileName}
+                  </div>
+                )}
                 <Textarea
                   id="resume"
                   value={resumeText}
                   onChange={(e) => setResumeText(e.target.value)}
-                  placeholder="Paste your resume text here... This helps the AI ask questions specific to your experience and skills."
-                  className="mt-2 min-h-[100px] resize-none font-mono text-xs"
+                  placeholder="Upload a PDF or paste your resume text here... This helps the AI ask questions specific to your experience and skills."
+                  className="min-h-[100px] resize-none font-mono text-xs"
                   rows={5}
                 />
               </div>
