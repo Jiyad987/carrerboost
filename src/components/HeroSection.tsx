@@ -21,11 +21,20 @@ export const HeroSection = ({ onGetStarted, onNavigate }: HeroSectionProps) => {
     {
       icon: Target,
       title: "Job Match Analyzer",
-      description: "Compare your resume with job descriptions and get match scores + roast",
+      description: "Compare your resume with job descriptions and get detailed match scores",
       section: "matcher",
       tag: "analyzer",
       color: "text-secondary",
       bg: "bg-secondary/10 border-secondary/20",
+    },
+    {
+      icon: Sparkles,
+      title: "Resume Roast 🔥",
+      description: "Get your resume brutally roasted with comedy memes and honest feedback",
+      section: "roast",
+      tag: "roast",
+      color: "text-destructive",
+      bg: "bg-destructive/10 border-destructive/20",
     },
     {
       icon: MessageSquare,
@@ -93,12 +102,36 @@ export const HeroSection = ({ onGetStarted, onNavigate }: HeroSectionProps) => {
               Get Started Free
               <ArrowRight className="w-4 h-4" />
             </Button>
+          </div>
+
+          {/* WhatsApp Quick Actions */}
+          <div className="flex flex-wrap gap-3 justify-center mt-6">
             <Button
-              size="lg"
-              variant="outline"
-              onClick={() => window.location.href = 'https://wa.me/917676074209?text=Hi%20Panikittum%2C%20I%20need%20help%20with%20my%20career.'}
+              size="sm"
+              variant="success"
+              onClick={() => window.location.href = 'https://wa.me/917676074209?text=Hi%20Panikittum%2C%20I%20want%20to%20improve%20my%20business%20leads.'}
+              className="gap-2 text-xs"
             >
-              Contact Us
+              <Briefcase className="w-3.5 h-3.5" />
+              Improve Business Leads
+            </Button>
+            <Button
+              size="sm"
+              variant="success"
+              onClick={() => window.location.href = 'https://wa.me/917676074209?text=Hi%20Panikittum%2C%20I%20need%20help%20finding%20a%20job.'}
+              className="gap-2 text-xs"
+            >
+              <Target className="w-3.5 h-3.5" />
+              Find a Job
+            </Button>
+            <Button
+              size="sm"
+              variant="success"
+              onClick={() => window.location.href = 'https://wa.me/917676074209?text=Hi%20Panikittum%2C%20I%20need%20help%20with%20self%20branding.'}
+              className="gap-2 text-xs"
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+              Self Branding
             </Button>
           </div>
 

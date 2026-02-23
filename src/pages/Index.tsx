@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { HeroSection } from "@/components/HeroSection";
 import { ResumeBuilder } from "@/components/ResumeBuilder";
 import { JobMatcher } from "@/components/JobMatcher";
+import { RoastResume } from "@/components/RoastResume";
 import { InterviewPractice } from "@/components/InterviewPractice";
 import { Services } from "@/components/Services";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -17,7 +18,8 @@ const Index = () => {
   const navItems = [
     { id: "home", label: "Home" },
     { id: "resume", label: "Resume" },
-    { id: "matcher", label: "Roast Resume" },
+    { id: "matcher", label: "Job Matcher" },
+    { id: "roast", label: "Roast Resume" },
     { id: "interview", label: "Interview" },
     { id: "services", label: "Services" },
   ];
@@ -126,6 +128,7 @@ const Index = () => {
         )}
         {activeSection === "resume" && <ResumeBuilder />}
         {activeSection === "matcher" && <JobMatcher />}
+        {activeSection === "roast" && <RoastResume />}
         {activeSection === "interview" && <InterviewPractice />}
         {activeSection === "services" && <Services />}
       </main>
