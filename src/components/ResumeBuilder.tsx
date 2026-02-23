@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Download } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { ResumeTemplates, TemplateType } from "@/components/resume/ResumeTemplates";
+import type { TemplateType } from "@/components/resume/ResumeTemplates";
 import { ResumePersonalInfo } from "@/components/resume/ResumePersonalInfo";
 import { ResumeExperience } from "@/components/resume/ResumeExperience";
 import { ResumeEducation } from "@/components/resume/ResumeEducation";
@@ -68,11 +68,6 @@ export const ResumeBuilder = () => {
         <div className="space-y-6">
           {/* PDF Upload */}
           <ResumePDFUpload onExtracted={handlePDFExtract} />
-
-          {/* Template Selection */}
-          <Card className="p-4 sm:p-6 shadow-lg">
-            <ResumeTemplates selectedTemplate={template} onSelectTemplate={setTemplate} />
-          </Card>
 
           {/* Form */}
           <Card className="p-4 sm:p-6 md:p-8 shadow-lg">

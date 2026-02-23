@@ -34,70 +34,7 @@ interface AnalysisResult {
   roastComments: string[];
 }
 
-type Mode = "roast";
-
-const roastPool = [
-  "🔥 This resume is so generic it could apply for literally any job, including 'Professional Napkin'.",
-  "😬 Your skills section reads like a Wikipedia article — all breadth, zero depth.",
-  "💀 'Proficient in Microsoft Office' — bold move in 2024. Did you also add 'can use a fax machine'?",
-  "🙈 I've seen more personality in a terms & conditions page.",
-  "😂 Your summary is so vague, even you probably forgot what job you're applying for.",
-  "🤔 Listing 'team player' as a skill is like listing 'breathing' on your resume.",
-  "💤 Three pages? Recruiters have 7 seconds. Congrats on being a very long yawn.",
-  "🤡 'Responsible for various tasks' — Wow. Riveting. What tasks? Watering plants?",
-  "😅 Your bullet points are so passive they could put a caffeinated recruiter to sleep.",
-  "🎭 This resume is like a mystery novel — no one can figure out what you actually do.",
-  "🪄 You've listed 'problem solver' but the biggest problem is this resume.",
-  "📉 The only thing this resume is optimized for is rejection.",
-  "🐌 Your career progression is so flat it makes a pancake look like Everest.",
-  "😤 No numbers, no metrics, no proof. Are you a ghost? Do you even exist at work?",
-  "🎯 You missed every keyword. Did you even read the job description, or just vibes?",
-];
-
-function getRoastComments(score: number, resumeText: string, missingSkills: string[]): string[] {
-  const comments: string[] = [];
-  const resumeLower = resumeText.toLowerCase();
-
-  // Score-based roasts
-  if (score < 40) {
-    comments.push("🔥 Match score under 40%? The job description and your resume are basically strangers at a party.");
-    comments.push("💀 At this rate, the ATS will reject you before a human even blinks.");
-  } else if (score < 60) {
-    comments.push("😬 A " + score + "% match? You're like a phone charger that *almost* fits — frustrating and useless.");
-  } else if (score < 75) {
-    comments.push("😅 " + score + "% match. You're in the 'maybe' pile. Recruiters hate the 'maybe' pile.");
-  }
-
-  // Content-based roasts
-  if (!resumeLower.includes("%") && !resumeLower.match(/\d+\s*(percent|increase|reduce|improve)/)) {
-    comments.push("📉 Zero quantifiable results. Your achievements are as measurable as happiness.");
-  }
-
-  if (resumeLower.includes("team player") || resumeLower.includes("hard worker")) {
-    comments.push("🤡 'Team player' and 'hard worker' — bold of you to list things every human being claims to be.");
-  }
-
-  if (resumeLower.includes("responsible for")) {
-    comments.push("😴 'Responsible for' is the resume equivalent of falling asleep mid-sentence. Use action verbs!");
-  }
-
-  if (missingSkills.length > 3) {
-    comments.push(`🎯 Missing ${missingSkills.length} required skills. The job wants a rocket scientist; your resume says astronaut fan.`);
-  }
-
-  if (!resumeLower.includes("project") && !resumeLower.includes("built") && !resumeLower.includes("developed")) {
-    comments.push("🤔 No projects mentioned. Did you just think about coding or actually do it?");
-  }
-
-  // Add random pool roasts to fill up
-  const shuffled = [...roastPool].sort(() => Math.random() - 0.5);
-  for (const r of shuffled) {
-    if (comments.length >= 5) break;
-    if (!comments.includes(r)) comments.push(r);
-  }
-
-  return comments.slice(0, 5);
-}
+type Mode = "analyze";
 
 export const JobMatcher = () => {
   const { toast } = useToast();
@@ -107,7 +44,7 @@ export const JobMatcher = () => {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [isExtractingPdf, setIsExtractingPdf] = useState(false);
   const [uploadedFileName, setUploadedFileName] = useState<string | null>(null);
-  const [mode] = useState<Mode>("roast");
+  const [mode] = useState<Mode>("analyze");
   const [expandedSection, setExpandedSection] = useState<string | null>("actionItems");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -172,7 +109,6 @@ export const JobMatcher = () => {
       const matchedSkills = requiredSkills.filter(s => resumeWords.includes(s));
       const missingSkills = requiredSkills.filter(s => !resumeWords.includes(s));
 
-      const roastComments = getRoastComments(matchScore, resumeText, missingSkills);
       const detailedAnalysis = generateDetailedAnalysis(matchScore, missingSkills, missingKeywords, jobDescription, resumeText, matchedSkills);
 
       setAnalysisResult({
@@ -184,11 +120,11 @@ export const JobMatcher = () => {
         suggestions: generateSuggestions(matchScore, missingSkills, missingKeywords),
         resumeSuggestions: generateResumeSuggestions(matchScore, missingSkills, missingKeywords, jobDescription, resumeText),
         detailedAnalysis,
-        roastComments,
+        roastComments: [],
       });
 
       setIsAnalyzing(false);
-      toast({ title: mode === "roast" ? "Roast Ready 🔥" : "Analysis Complete!", description: `Match score: ${matchScore}%` });
+      toast({ title: "Analysis Complete!", description: `Match score: ${matchScore}%` });
     }, 2000);
   };
 
@@ -301,25 +237,15 @@ export const JobMatcher = () => {
 
         {/* Header */}
         <div className="text-center mb-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono border border-destructive/30 text-destructive mb-4">
-            <Flame className="w-3 h-3" />
-            resume_roast.execute()
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono border border-primary/30 text-primary mb-4">
+            <Target className="w-3 h-3" />
+            job_match.analyze()
           </div>
-          <h2 className="text-3xl sm:text-4xl font-bold mb-3 tracking-tight">Roast My Resume 🔥</h2>
+          <h2 className="text-3xl sm:text-4xl font-bold mb-3 tracking-tight">Job Match Analyzer</h2>
           <p className="text-muted-foreground text-sm max-w-xl mx-auto">
-            Upload your resume and a job description — get brutally roasted with zero mercy
+            Compare your resume against a job description and get a detailed match analysis
           </p>
         </div>
-
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-6 p-4 rounded-xl border border-destructive/20 bg-destructive/5 text-center"
-        >
-          <p className="text-sm text-destructive font-medium">
-            🔥 AI will brutally (but helpfully) judge your resume with zero mercy
-          </p>
-        </motion.div>
 
         {/* Input Area */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
@@ -370,14 +296,14 @@ export const JobMatcher = () => {
           <Button
             onClick={runAnalysis}
             size="lg"
-            variant="roast"
+            variant="gradient"
             disabled={isAnalyzing}
             className="gap-2 min-w-48"
           >
             {isAnalyzing ? (
-              <><Loader2 className="w-5 h-5 animate-spin" />Roasting...</>
+              <><Loader2 className="w-5 h-5 animate-spin" />Analyzing...</>
             ) : (
-              <><Flame className="w-5 h-5" />Roast My Resume 🔥</>
+              <><Target className="w-5 h-5" />Analyze Match</>
             )}
           </Button>
         </div>
@@ -424,35 +350,6 @@ export const JobMatcher = () => {
                 </div>
               </Card>
 
-              {/* Roast Section — always shown */}
-              {(
-                <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}>
-                  <Card className="p-6 border-destructive/30 bg-destructive/5 shadow-lg">
-                    <div className="flex items-center gap-2 mb-5">
-                      <Flame className="w-6 h-6 text-destructive" />
-                      <h3 className="text-xl font-bold text-destructive">Resume Roast 🔥</h3>
-                      <span className="ml-auto text-xs font-mono text-muted-foreground">// brutal_feedback()</span>
-                    </div>
-                    <div className="space-y-3">
-                      {analysisResult.roastComments.map((comment, i) => (
-                        <motion.div
-                          key={i}
-                          initial={{ opacity: 0, x: -10 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: i * 0.1 }}
-                          className="flex items-start gap-3 p-4 bg-destructive/8 rounded-lg border border-destructive/15"
-                        >
-                          <span className="font-mono text-xs text-muted-foreground flex-shrink-0 mt-0.5">#{i + 1}</span>
-                          <span className="text-sm leading-relaxed">{comment}</span>
-                        </motion.div>
-                      ))}
-                    </div>
-                    <p className="text-xs text-muted-foreground text-center mt-4 font-mono">
-                      // remember: this is tough love — now fix it 💪
-                    </p>
-                  </Card>
-                </motion.div>
-              )}
 
               {/* Skills Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
