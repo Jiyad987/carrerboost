@@ -127,7 +127,7 @@ export const HeroSection = ({ onGetStarted, onNavigate }: HeroSectionProps) => {
             <Button
               size="sm"
               variant="success"
-              onClick={() => window.location.href = 'https://wa.me/917676074209?text=Hi%20Panikittum%2C%20I%20need%20help%20with%20self%20branding.'}
+              onClick={() => window.location.href = 'https://wa.me/917676074209?text=Hi%20FixMyCareer.in%2C%20I%20need%20help%20with%20self%20branding.'}
               className="gap-2 text-xs"
             >
               <Sparkles className="w-3.5 h-3.5" />
