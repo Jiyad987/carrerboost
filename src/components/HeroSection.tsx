@@ -109,7 +109,7 @@ export const HeroSection = ({ onGetStarted, onNavigate }: HeroSectionProps) => {
             <Button
               size="sm"
               variant="success"
-              onClick={() => window.location.href = 'https://wa.me/917676074209?text=Hi%20Panikittum%2C%20I%20want%20to%20improve%20my%20business%20leads.'}
+              onClick={() => window.location.href = 'https://wa.me/917676074209?text=Hi%20FixMyCareer.in%2C%20I%20want%20to%20improve%20my%20business%20leads.'}
               className="gap-2 text-xs"
             >
               <Briefcase className="w-3.5 h-3.5" />
@@ -118,7 +118,7 @@ export const HeroSection = ({ onGetStarted, onNavigate }: HeroSectionProps) => {
             <Button
               size="sm"
               variant="success"
-              onClick={() => window.location.href = 'https://wa.me/917676074209?text=Hi%20Panikittum%2C%20I%20need%20help%20finding%20a%20job.'}
+              onClick={() => window.location.href = 'https://wa.me/917676074209?text=Hi%20FixMyCareer.in%2C%20I%20need%20help%20finding%20a%20job.'}
               className="gap-2 text-xs"
             >
               <Target className="w-3.5 h-3.5" />
@@ -127,7 +127,7 @@ export const HeroSection = ({ onGetStarted, onNavigate }: HeroSectionProps) => {
             <Button
               size="sm"
               variant="success"
-              onClick={() => window.location.href = 'https://wa.me/917676074209?text=Hi%20Panikittum%2C%20I%20need%20help%20with%20self%20branding.'}
+              onClick={() => window.location.href = 'https://wa.me/917676074209?text=Hi%20FixMyCareer.in%2C%20I%20need%20help%20with%20self%20branding.'}
               className="gap-2 text-xs"
             >
               <Sparkles className="w-3.5 h-3.5" />
@@ -200,7 +200,7 @@ export const HeroSection = ({ onGetStarted, onNavigate }: HeroSectionProps) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-4">
               {[
-                { label: "Company", value: "Eduwants Global" },
+                { label: "Company", value: "FixMyCareer.in" },
                 { label: "Location", value: "Kochi, Kerala" },
                 { label: "Phone", value: "+91 7676074209" },
               ].map(({ label, value }) => (
@@ -219,7 +219,7 @@ export const HeroSection = ({ onGetStarted, onNavigate }: HeroSectionProps) => {
                 <Button
                   size="sm"
                   variant="success"
-                  onClick={() => window.location.href = 'https://wa.me/917676074209?text=Hi%20Panikittum%2C%20I%20need%20help%20with%20my%20career.'}
+                  onClick={() => window.location.href = 'https://wa.me/917676074209?text=Hi%20FixMyCareer.in%2C%20I%20need%20help%20with%20my%20career.'}
                   className="flex-1 text-xs"
                 >
                   WhatsApp
@@ -227,7 +227,7 @@ export const HeroSection = ({ onGetStarted, onNavigate }: HeroSectionProps) => {
                 <Button
                   size="sm"
                   variant="outline"
-                  onClick={() => window.location.href = 'mailto:sayedmuhammedjiyad@gmail.com?subject=Career%20Help%20Request&body=Hi%20Panikittum%2C%20I%20need%20help%20with%20my%20career.'}
+                  onClick={() => window.location.href = 'mailto:sayedmuhammedjiyad@gmail.com?subject=Career%20Help%20Request&body=Hi%20FixMyCareer.in%2C%20I%20need%20help%20with%20my%20career.'}
                   className="flex-1 text-xs"
                 >
                   Email Us
