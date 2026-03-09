@@ -227,7 +227,7 @@ export const HeroSection = ({ onGetStarted, onNavigate }: HeroSectionProps) => {
                 <Button
                   size="sm"
                   variant="outline"
-                  onClick={() => window.location.href = 'mailto:sayedmuhammedjiyad@gmail.com?subject=Career%20Help%20Request&body=Hi%20Panikittum%2C%20I%20need%20help%20with%20my%20career.'}
+                  onClick={() => window.location.href = 'mailto:sayedmuhammedjiyad@gmail.com?subject=Career%20Help%20Request&body=Hi%20FixMyCareer.in%2C%20I%20need%20help%20with%20my%20career.'}
                   className="flex-1 text-xs"
                 >
                   Email Us

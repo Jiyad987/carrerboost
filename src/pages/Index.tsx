@@ -137,13 +137,12 @@ const Index = () => {
         <div className="container mx-auto px-4 py-8">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2">
-              <img src={logo} alt="Panikittum" className="w-6 h-6 object-contain" />
-              <span className="font-semibold text-sm">Panikittum</span>
-              <span className="text-muted-foreground text-sm">by Eduwants Global</span>
+              <img src={logo} alt="FixMyCareer.in" className="w-6 h-6 object-contain" />
+              <span className="font-semibold text-sm">FixMyCareer.in</span>
             </div>
             <div className="flex items-center gap-1 text-xs text-muted-foreground font-mono">
               <Terminal className="w-3 h-3" />
-              <span>© 2024 Panikittum. Built for career success.</span>
+              <span>© 2024 FixMyCareer.in. Built for career success.</span>
             </div>
           </div>
         </div>
