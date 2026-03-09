@@ -90,7 +90,7 @@ export const Services = () => {
               <Button
                 variant="gradient"
                 size="lg"
-                onClick={() => window.location.href = "https://wa.me/917676074209?text=Hi%20Panikittum%2C%20I%20need%20help%20with%20my%20career."}
+                onClick={() => window.location.href = "https://wa.me/917676074209?text=Hi%20FixMyCareer.in%2C%20I%20need%20help%20with%20my%20career."}
               >
                 <MessageCircle className="w-5 h-5 mr-2" />
                 WhatsApp Us
