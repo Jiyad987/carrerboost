@@ -200,7 +200,7 @@ export const HeroSection = ({ onGetStarted, onNavigate }: HeroSectionProps) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-4">
               {[
-                { label: "Company", value: "Eduwants Global" },
+                { label: "Company", value: "FixMyCareer.in" },
                 { label: "Location", value: "Kochi, Kerala" },
                 { label: "Phone", value: "+91 7676074209" },
               ].map(({ label, value }) => (
