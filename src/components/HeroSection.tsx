@@ -109,7 +109,7 @@ export const HeroSection = ({ onGetStarted, onNavigate }: HeroSectionProps) => {
             <Button
               size="sm"
               variant="success"
-              onClick={() => window.location.href = 'https://wa.me/917676074209?text=Hi%20Panikittum%2C%20I%20want%20to%20improve%20my%20business%20leads.'}
+              onClick={() => window.location.href = 'https://wa.me/917676074209?text=Hi%20FixMyCareer.in%2C%20I%20want%20to%20improve%20my%20business%20leads.'}
               className="gap-2 text-xs"
             >
               <Briefcase className="w-3.5 h-3.5" />
