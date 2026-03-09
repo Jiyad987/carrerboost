@@ -44,11 +44,11 @@ const Index = () => {
               onClick={() => handleNavClick("home")}
             >
               <div className="relative">
-                <img src={logo} alt="Panikittum Logo" className="w-8 h-8 sm:w-10 sm:h-10 object-contain" />
+                <img src={logo} alt="FixMyCareer.in Logo" className="w-8 h-8 sm:w-10 sm:h-10 object-contain" />
               </div>
               <div className="flex flex-col leading-none">
                 <span className="text-lg sm:text-xl font-bold bg-gradient-hero bg-clip-text text-transparent tracking-tight">
-                  Panikittum
+                  FixMyCareer.in
                 </span>
                 <span className="text-[10px] text-muted-foreground font-mono hidden sm:block">
                   career_boost.ai
